@@ -14,6 +14,7 @@ class b32 {
 
     void add_to(const b32& op);
     void add_to(uint64_t adnd);
+    void multiply_with(const b32& op);
 
     void get_vector(vec32& num_vec) const {num_vec = num;}
     void set_vector(const vec32& num_vec) { num = num_vec;}
@@ -21,6 +22,7 @@ class b32 {
 
     private:
     void add_singles(const b32& op);
+    void multiply_singles(const b32& op);
     void shift_left_digits(uint32_t len);
     bool is_zero() const;
     void print_vec() const;
