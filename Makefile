@@ -24,4 +24,6 @@ binX:
 bin/b32.a:$(OBJS)
 	ar r bin/b32.a $(OBJS)
 
+clean:
+	rm -rf bin
 
