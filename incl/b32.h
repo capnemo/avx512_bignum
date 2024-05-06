@@ -9,7 +9,7 @@
 class b32 {
 
     public:
-    b32() {}
+    b32():num({0}) {}
     b32(const vec32& v, bool s = false):num(v),is_negative(s) {}
 
     void convert_to_b32(const vec8& b10_num);
@@ -17,21 +17,24 @@ class b32 {
 
     void add_to(const b32& op);
     void add_to(uint64_t adnd);
+    void subtract_from(const b32& op);
     void multiply_with(const b32& op);
+    void divide_by(const b32& op);
 
     void get_vector(vec32& num_vec) const {num_vec = num;}
     void set_vector(const vec32& num_vec) { num = num_vec;}
     bool is_less_than_zero() const { return is_negative; }
 
     private:
-    void add_singles(const b32& op);
+    void add_singles(const b32& op); //Singles should take 2 uint32_t
     void multiply_singles(const b32& op);
-    void shift_left_digits(uint32_t len);
+    void subtract_singles(const b32& op);
     bool is_zero() const;
     void print_vec() const;
     void get_base10_num(std::string& str);
     void flip_sign();
     void set_zero();
+    void shift_left_digits(uint32_t len);
     void shift_left_array(uint32_t width);
     void shift_left(vec32& digits, uint8_t width);
     void shift_right_array(uint32_t width);
@@ -45,9 +48,11 @@ class b32 {
     size_t get_array_msb_index() const;
     int compare_abs(const b32& cmp) const;
     bool is_unity() const;
+    void set_div_error() {div_error = true;}
 
     private:
     vec32 num;
+    bool div_error = false;
     bool is_negative = false;
     static constexpr __m512i zero_512 = {0, 0, 0, 0, 0, 0, 0, 0};
 };

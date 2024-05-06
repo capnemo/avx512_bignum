@@ -1,5 +1,5 @@
-OBJS:=bin/b10.o bin/b32_util.o bin/b32_add.o bin/b32_multiply.o
-SRCS:=src/b10.cpp src/b32_util.cpp src/b32_add.cpp src/b32_multiply.cpp
+OBJS:=bin/b10.o bin/b32_util.o bin/b32_add.o bin/b32_multiply.o bin/b32_subtract.o bin/b32_divide.o
+SRCS:=src/b10.cpp src/b32_util.cpp src/b32_add.cpp src/b32_multiply.cpp src/b32_subtract.cpp src/b32_divide.cpp
 INCL:=incl/b10.h 
 
 CC=g++ -c -Iincl -mavx512bw
