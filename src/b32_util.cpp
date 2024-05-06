@@ -180,3 +180,28 @@ void b32::trim_leading_zeros()
     if (i != 0)
         num.erase(num.begin(), num.begin() + i);
 }
+
+void b32::convert_to_b32(const std::string& b10_num)
+{
+    vec8 b10_vec;
+    for (auto m:b10_num)
+        b10_vec.push_back(m - '0');
+
+    convert_to_b32(b10_vec);
+}
+
+void b32::convert_to_b32(const vec8& b10_num)
+{
+    b32 power_10({1});
+    b32 num_10({10});
+
+    int sz = b10_num.size();
+    num.clear();
+    num.push_back(b10_num[sz - 1]);
+    for (int i = sz - 2; i >= 0; i--) {
+        power_10.multiply_with(num_10);
+        b32 pos({b10_num[i]});
+        pos.multiply_with(power_10);
+        add_to(pos);
+    }
+}

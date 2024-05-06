@@ -12,6 +12,9 @@ class b32 {
     b32() {}
     b32(const vec32& v, bool s = false):num(v),is_negative(s) {}
 
+    void convert_to_b32(const vec8& b10_num);
+    void convert_to_b32(const std::string& b10_num);
+
     void add_to(const b32& op);
     void add_to(uint64_t adnd);
     void multiply_with(const b32& op);
@@ -27,8 +30,6 @@ class b32 {
     bool is_zero() const;
     void print_vec() const;
     void get_base10_num(std::string& str);
-    void convert_to_b32(const std::string& b10_num);
-    void convert_to_b32(const vec8& b10_num);
     void flip_sign();
     void set_zero();
     void shift_left_array(uint32_t width);
