@@ -24,13 +24,13 @@ class b32 {
     void get_vector(vec32& num_vec) const {num_vec = num;}
     void set_vector(const vec32& num_vec) { num = num_vec;}
     bool is_less_than_zero() const { return is_negative; }
+    void print_vec() const;
 
     private:
     void add_singles(const b32& op); //Singles should take 2 uint32_t
     void multiply_singles(const b32& op);
     void subtract_singles(const b32& op);
     bool is_zero() const;
-    void print_vec() const;
     void get_base10_num(std::string& str);
     void flip_sign();
     void set_zero();
