@@ -1,5 +1,5 @@
-OBJS:=bin/b10.o
-SRCS:=src/b10.cpp 
+OBJS:=bin/b10.o bin/b32_util.o
+SRCS:=src/b10.cpp src/b32_util.cpp
 INCL:=incl/b10.h 
 
 CC=g++ -c -Iincl -mavx512bw
