@@ -46,9 +46,6 @@ void b32::subtract_from(const b32& op)
         flip_sign();
     }
 
-// The intrinsic _mm512_sub_epi64 seems to return the same result
-// for a - b and b - a. Need to try it out. The compliment thing 
-// looks very dubious.
     size_t sz_diff = lg_ptr->size() - sm_ptr->size();
     std::vector<int64_t> diff_vec;
     diff_vec.reserve(sm_ptr->size());
@@ -95,6 +92,8 @@ void b32::subtract_from(const b32& op)
             carry = 1;
         }
         (*lg_ptr)[p] = num64;
+        if (carry == 0)
+            break;
     }
 
     num = *lg_ptr;
