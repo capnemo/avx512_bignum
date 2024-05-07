@@ -3,6 +3,7 @@
 import sys
 import random
 import subprocess
+import timeit
 
 def usage(arg1):
     print("Usage:", arg1, "-a|-s|-m|-d")
@@ -49,6 +50,7 @@ def run_and_compare(op, a1, a2):
 
 def run_op_for_sizes(op):
     arg_sizes = [1, 2, 3, 4, 8, 10, 20, 40, 100, 200, 1000]
+    start_time = timeit.default_timer()
     for a in arg_sizes:
         arg1 = random_number_from_file(a)
         print('Running test for', op, 'for size', a)
@@ -56,6 +58,7 @@ def run_op_for_sizes(op):
             arg2 = random_number_from_file(s)
             run_and_compare(op, arg1, arg2)
             run_and_compare(op, arg2, arg1)
+    print("Time taken for", op, "is", timeit.default_timer() - start_time)
     
 def run_op_for_specifics(op):
     b32_digit = 2^32
