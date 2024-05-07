@@ -36,6 +36,11 @@ void b32::divide_by(const b32& op)
         return; //handle the remainder
     }
 
+    if ((get_array_size() == 1) && (op.get_array_size() == 1)) {
+        num[0] = get_msb() / op.get_msb();
+        return;
+    }
+
     b32 dvsr({0});
     while (this->compare_abs(op) >= 0) {
         uint32_t shift_width = get_array_msb_index() - 
