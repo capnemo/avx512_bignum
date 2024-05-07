@@ -1,18 +1,29 @@
 #include "b32.h"
 #include "b10.h"
 
+
+void b32::multiply_with_10()
+{
+    b32 base_num = *this;
+    b32 sum({0});
+    base_num.shift_left_array(1);
+    sum.add_to(base_num);
+    base_num.shift_left_array(2);
+    sum.add_to(base_num);
+    
+    sum.get_vector(num);
+}
+
 void b32::multiply_singles(const b32& op)
 {
-    //do we really need variables?
-    uint64_t m1 = get_msb();
-    uint64_t m2 = op.get_msb();
     split_64 prod;
-    prod.w = m1 * m2;
-    
-    num.clear();
-    if (prod.a[1] != 0) 
-        num.push_back(prod.a[1]);
-    num.push_back(prod.a[0]);
+    prod.w = (uint64_t)get_msb() * (uint64_t)op.get_msb();
+
+    if (prod.a[1] != 0)  {
+        num[0] = prod.a[1];
+        num.push_back(prod.a[0]);
+    } else 
+        num[0] = prod.a[0];
 }
 
 void b32::multiply_with(const b32& op)

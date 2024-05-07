@@ -15,16 +15,15 @@ void b32::add_to(uint64_t adnd)
 }
 
 void b32::add_singles(const b32& op)
-{   //do we really need variables?
-    uint64_t m1 = get_msb();
-    uint64_t m2 = op.get_msb();
+{
     split_64 sum;
-
-    sum.w = m1 + m2;
-    num.clear();
-    if (sum.a[1] != 0)
-        num.push_back(sum.a[1]);
-    num.push_back(sum.a[0]);
+    sum.w = (uint64_t)get_msb() + (uint64_t)op.get_msb();
+    
+    if (sum.a[1] != 0) {
+        num[0] = sum.a[1];
+        num.push_back(sum.a[0]);
+    } else 
+        num[0] = sum.a[0];
 }
 
 void b32::add_to(const b32& op)

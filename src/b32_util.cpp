@@ -199,7 +199,7 @@ void b32::convert_to_b32(const vec8& b10_num)
     num.clear();
     num.push_back(b10_num[sz - 1]);
     for (int i = sz - 2; i >= 0; i--) {
-        power_10.multiply_with(num_10);
+        power_10.multiply_with_10();
         b32 pos({b10_num[i]});
         pos.multiply_with(power_10);
         add_to(pos);

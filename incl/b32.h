@@ -12,7 +12,6 @@ class b32 {
     b32():num({0}) {}
     b32(const vec32& v, bool s = false):num(v),is_negative(s) {}
 
-    void convert_to_b32(const vec8& b10_num);
     void convert_to_b32(const std::string& b10_num);
 
     void add_to(const b32& op);
@@ -27,8 +26,10 @@ class b32 {
     void print_vec() const;
 
     private:
+    void convert_to_b32(const vec8& b10_num);
     void add_singles(const b32& op); //Singles should take 2 uint32_t
     void multiply_singles(const b32& op);
+    void multiply_with_10();
     void subtract_singles(const b32& op);
     bool is_zero() const;
     void get_base10_num(std::string& str);
