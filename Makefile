@@ -10,8 +10,8 @@ debug: CC += -ggdb
 debug: CC2 += -ggdb
 debug: all
 
-release: CC += -Ofast 
-release: CC2 += -Ofast
+release: CC += -Os
+release: CC2 += -Os
 release: all
 
 all:binX bin/b32.a tests
