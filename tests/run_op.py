@@ -19,7 +19,6 @@ def gen_random_number(size):
 def random_number_from_file(size):
     rand_file = subprocess.run(["./gen_num", str(size)], encoding='utf-8', 
                                 capture_output=True)
-    #print(rand_file.stdout.rstrip())
     f = open(rand_file.stdout.rstrip())
     num = f.read()
     return num
@@ -39,6 +38,7 @@ def run_and_compare(op, a1, a2):
     local_result = run_local(op, int(a1), int(a2))
     result = subprocess.run(["./operator_drv", op, a1, a2], 
                                 encoding='utf-8', capture_output=True)
+    
     b32_result = int(str(result.stdout).rstrip())
     if local_result != int(b32_result):
         print('fail')
@@ -86,18 +86,33 @@ def run_all():
     ops_set = ['-a', '-s', '-m', '-d']
     for op in ops_set:
         run_op_for_sizes(op)
+    run_sign_tests()
         
 
+def run_sign_tests():
+    print('Running sign tests')
+    a1 = random_number_from_file(3);
+    a2 = random_number_from_file(3);
+    result = subprocess.run(["./operator_drv", '-sign', a1, a2], encoding='utf-8', 
+                            capture_output=True)
+    r = str(result.stdout).rstrip();
+    if (r != ''):
+        print(r);
+    
 if __name__ == '__main__':
     if len(sys.argv) > 3 or len(sys.argv) == 1:
         usage(sys.argv[0])
         exit(1)
 
     op = sys.argv[len(sys.argv) - 1]
-    ops_set = ['-a', '-s', '-m', '-d', 'all']
+    ops_set = ['-a', '-s', '-m', '-d', 'all', 'sign']
     if (op not in ops_set):
         usage(sys.argv[0])
         exit(1)
+
+    if (sys.argv[1] == 'sign'):
+        run_sign_tests()
+        exit(0)
 
     if (sys.argv[1] == 'all'):
         run_all()
