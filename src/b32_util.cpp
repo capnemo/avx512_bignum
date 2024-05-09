@@ -183,14 +183,21 @@ void b32::trim_leading_zeros()
 
 void b32::convert_to_b32(const std::string& b10_num)
 {
+    bool is_neg = false;
+    std::string b10_str = b10_num;
+    if (b10_str[0] == '-') {
+        b10_str.erase(b10_str.begin());
+        is_neg = true;
+    }
+
     vec8 b10_vec;
-    for (auto m:b10_num)
+    for (auto m:b10_str)
         b10_vec.push_back(m - '0');
 
-    convert_to_b32(b10_vec);
+    convert_to_b32(b10_vec, is_neg);
 }
 
-void b32::convert_to_b32(const vec8& b10_num)
+void b32::convert_to_b32(const vec8& b10_num, bool under_zero)
 {
     b32 power_10({1});
     b32 num_10({10});
@@ -204,4 +211,15 @@ void b32::convert_to_b32(const vec8& b10_num)
         pos.multiply_with(power_10);
         add_to(pos);
     }
+    is_negative = under_zero;
 }
+
+void b32::resolve_signs(const b32& cmp)
+{
+    if (is_less_than_zero() == cmp.is_less_than_zero()) {
+        if (is_negative == true)
+            is_negative = false;
+    } else 
+        is_negative = true;
+}
+

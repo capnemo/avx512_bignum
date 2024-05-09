@@ -6,8 +6,8 @@ TEST_SRC=:=tests/conv_drv.cpp tests/operator_drv.cpp
 CC=g++ -c -Iincl -mavx512bw
 CC2=g++ -Iincl 
 
-debug: CC += -ggdb
-debug: CC2 += -ggdb
+debug: CC += -ggdb -Og
+debug: CC2 += -ggdb -Og
 debug: all
 
 release: CC += -Os

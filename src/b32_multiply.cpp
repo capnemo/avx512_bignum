@@ -36,6 +36,8 @@ void b32::multiply_with(const b32& op)
         return;
     }
 
+    resolve_signs(op);
+
     if (op.is_unity() == true) 
         return;
 

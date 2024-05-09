@@ -26,8 +26,8 @@ class b32 {
     void print_vec() const;
 
     private:
-    void convert_to_b32(const vec8& b10_num);
-    void add_singles(const b32& op); //Singles should take 2 uint32_t
+    void convert_to_b32(const vec8& b10_num, bool under_zero = false);
+    void add_singles(const b32& op); 
     void multiply_singles(const b32& op);
     void multiply_with_10();
     void subtract_singles(const b32& op);
@@ -50,6 +50,7 @@ class b32 {
     int compare_abs(const b32& cmp) const;
     bool is_unity() const;
     void set_div_error() {div_error = true;}
+    void resolve_signs(const b32& cmp);
 
     private:
     vec32 num;

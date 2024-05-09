@@ -1,10 +1,6 @@
 #include "b32.h"
 #include "b10.h"
 
-//All ops have to consider the case of a single element in *this and the
-//argument
-
-
 //To Be Considered. When shifted_op is shifted by n, consider filling
 // the bits from n to n - r with shifted op.
 //for x in n - r to r shift op and add to shifted_op. r is the size of op
@@ -22,6 +18,11 @@ void b32::divide_by(const b32& op)
         set_div_error();
         return;
     }
+
+    if (is_zero() == true) 
+        return;
+
+    resolve_signs(op);
 
     int64_t df = compare_abs(op);
     if (df == 0) {
@@ -41,7 +42,7 @@ void b32::divide_by(const b32& op)
         return;
     }
 
-    b32 dvsr({0});
+    b32 dvsr({0}, is_negative);
     while (this->compare_abs(op) >= 0) {
         uint32_t shift_width = get_array_msb_index() - 
                                op.get_array_msb_index();

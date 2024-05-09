@@ -38,6 +38,13 @@ void b32::add_to(const b32& op)
         return;
     }
 
+    if (is_less_than_zero() != op.is_less_than_zero()) {
+        b32 new_op = op;
+        new_op.flip_sign();
+        subtract_from(new_op);
+        return;
+    }
+
     if ((op.get_array_size() == 1) && (get_array_size() == 1)) {
         add_singles(op);
         return;

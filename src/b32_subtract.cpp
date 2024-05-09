@@ -5,10 +5,8 @@ void b32::subtract_singles(const b32& op)
 {
     int32_t diff = get_msb() - op.get_msb();
     
-    if (diff < 0)  {
+    if (diff < 0)  
         diff *= -1;
-        is_negative = true;
-    }
 
     num[0] = diff;
 }
@@ -27,8 +25,10 @@ void b32::subtract_from(const b32& op)
         return;
     }
 
-    if ((op.get_array_size() == 1) && (get_array_size() == 1)) {
-        subtract_singles(op);
+    bool op_sign = !op.is_less_than_zero();
+    if (is_negative == op_sign) {
+        b32 new_op(op_vec, op_sign);
+        add_to(new_op);
         return;
     }
 
@@ -38,12 +38,19 @@ void b32::subtract_from(const b32& op)
         return;
     }
 
+    if (diff < 0)
+        flip_sign();
+
+    if ((op.get_array_size() == 1) && (get_array_size() == 1)) {
+        subtract_singles(op);
+        return;
+    }
+
     vec32* lg_ptr = &num;
     vec32* sm_ptr = &op_vec;
     if (diff < 0) {
         lg_ptr = &op_vec;
         sm_ptr = &num;
-        flip_sign();
     }
 
     size_t sz_diff = lg_ptr->size() - sm_ptr->size();
