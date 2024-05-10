@@ -6,7 +6,7 @@ import subprocess
 import timeit
 
 def usage(arg1):
-    print("Usage:", arg1, '-a|-s|-m|-d')
+    print("Usage:", arg1, '-a|-s|-m|-d|-r')
     print("Usage:", arg1, 'all')
     print("Usage:", arg1, 'sign')
 
@@ -35,6 +35,8 @@ def run_local(op, a1, a2):
             return a1 * a2;
         case '-d':
             return a1 // a2;
+        case '-r':
+            return a1 % a2;
 
 def run_and_compare(op, a1, a2):
     local_result = run_local(op, int(a1), int(a2))
@@ -85,7 +87,7 @@ def run_op_for_specifics(op):
             run_and_compare(op, rstr, lstr)
 
 def run_all():
-    ops_set = ['-a', '-s', '-m', '-d']
+    ops_set = ['-a', '-s', '-m', '-d', '-r']
     for op in ops_set:
         run_op_for_sizes(op)
     run_sign_tests()
@@ -114,7 +116,7 @@ if __name__ == '__main__':
         exit(1)
 
     op = sys.argv[len(sys.argv) - 1]
-    ops_set = ['-a', '-s', '-m', '-d', 'all', 'sign']
+    ops_set = ['-a', '-s', '-m', '-d', '-r', 'all', 'sign']
     if (op not in ops_set):
         usage(sys.argv[0])
         exit(1)

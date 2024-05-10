@@ -12,6 +12,7 @@ void add(b32& p1, const b32& p2);
 void multiply(b32& p1, const b32& p2);
 void subtract(b32& p1, const b32& p2);
 void divide(b32& p1, const b32& p2);
+void get_remainder(b32& p1, const b32& p2);
 
 void run_function(char func, const std::string& arg1, const std::string& arg2, 
                   std::string& result);
@@ -40,7 +41,7 @@ bool validate_args(std::vector<std::string>& args)
     if (args.size() != 3) 
         return false;
  
-    std::set<std::string> op_args = {"-a", "-m", "-s", "-d", "-sign"};
+    std::set<std::string> op_args = {"-a", "-m", "-s", "-d", "-r", "-sign"};
     if ((args.size() == 3) && (op_args.find(args[0]) == op_args.end()))
         return false;
 
@@ -61,6 +62,8 @@ int run_native(char op, const std::string& s1, const std::string& s2)
             return a1 * a2;
         case 'd':
             return a1 / a2;
+        case 'r':
+            return a1 % a2;
     }
 
     return 77777;
@@ -76,7 +79,8 @@ void run_function(char func, const std::string& arg1, const std::string& arg2,
     static function_map func_map = {{'a', add}, 
                                     {'m', multiply}, 
                                     {'s', subtract}, 
-                                    {'d', divide}};
+                                    {'d', divide},
+                                    {'r', get_remainder}};
 
     function_map_iter f = func_map.find(func);
     if (f == func_map.end())
@@ -106,7 +110,17 @@ void divide(b32& p1, const b32& p2)
     p1.divide_by(p2);
 }
 
+void get_remainder(b32& p1, const b32& p2)
+{
+    p1.divide_by(p2);
+    b32 r;
+    p1.get_remainder(r);
+    p1.reset_remainder();
+    p1 = r;
+}
+
 void usage(const char* pname)
 {
     std::cout << "Usage " << pname << " -a|-s|-m|-d <num1> <num2>" << std::endl;
 }
+

@@ -24,6 +24,12 @@ void b32::divide_by(const b32& op)
 
     resolve_signs(op);
 
+    if ((get_array_size() == 1) && (op.get_array_size() == 1)) {
+        remainder[0] = get_msb() % op.get_msb();
+        num[0] = get_msb() / op.get_msb();
+        return;
+    }
+
     int64_t df = compare_abs(op);
     if (df == 0) {
         num.clear();
@@ -32,17 +38,13 @@ void b32::divide_by(const b32& op)
     }
 
     if (df < 0) {
+        get_vector(remainder);
         num.clear();
         num.push_back(0);
-        return; //handle the remainder
-    }
-
-    if ((get_array_size() == 1) && (op.get_array_size() == 1)) {
-        num[0] = get_msb() / op.get_msb();
         return;
     }
 
-    b32 dvsr({0}, is_negative);
+    b32 quot({0}, is_negative);
     while (this->compare_abs(op) >= 0) {
         uint32_t shift_width = get_array_msb_index() - 
                                op.get_array_msb_index();
@@ -53,11 +55,21 @@ void b32::divide_by(const b32& op)
             shift_width--;
         }
         this->subtract_from(shifted_op);
-        b32 current_dvsr({1});
-        current_dvsr.shift_left_array(shift_width);
-        dvsr.add_to(current_dvsr);
+        b32 current_quot({1});
+        current_quot.shift_left_array(shift_width);
+        quot.add_to(current_quot);
     }
     
-    //At this point, num is the remainder
-    dvsr.get_vector(num);  
+    remainder = num;
+    quot.get_vector(num);  
+}
+
+void b32::reset_remainder()
+{
+    remainder = {0};
+}
+
+void b32::get_remainder(b32& rem)
+{
+    rem = b32(remainder, false);
 }

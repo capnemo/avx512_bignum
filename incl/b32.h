@@ -19,6 +19,8 @@ class b32 {
     void subtract_from(const b32& op);
     void multiply_with(const b32& op);
     void divide_by(const b32& op);
+    void get_remainder(b32& rem);
+    void reset_remainder();
 
     void get_vector(vec32& num_vec) const {num_vec = num;}
     void set_vector(const vec32& num_vec) { num = num_vec;}
@@ -54,6 +56,8 @@ class b32 {
 
     private:
     vec32 num;
+    vec32 remainder = {0};
+    bool remainder_set = false;
     bool div_error = false;
     bool is_negative = false;
     static constexpr __m512i zero_512 = {0, 0, 0, 0, 0, 0, 0, 0};
