@@ -13,9 +13,8 @@ void multiply(b32& p1, const b32& p2);
 void subtract(b32& p1, const b32& p2);
 void divide(b32& p1, const b32& p2);
 
-void run_function(char func, const std::string& arg1, const std::string& arg2, std::string& result);
-void run_sign_tests(const std::string& arg1, const std::string& arg2);
-void sign_test(char op, const std::string& a1, const std::string& a2);
+void run_function(char func, const std::string& arg1, const std::string& arg2, 
+                  std::string& result);
 bool validate_args(std::vector<std::string>& args);
 int run_native(char op, const std::string& s1, const std::string& s2);
 
@@ -31,11 +30,9 @@ int main(int argc, char *argv[])
     }
 
     std::string ans;
-    if (arg_vec[0] != "-sign") {
-        run_function(arg_vec[0][1], arg_vec[1], arg_vec[2], ans);
-        std::cout << ans << std::endl;
-    } else
-        run_sign_tests(arg_vec[1], arg_vec[2]);
+    run_function(arg_vec[0][1], arg_vec[1], arg_vec[2], ans);
+    std::cout << ans << std::endl;
+    return 0;
 }
 
 bool validate_args(std::vector<std::string>& args)
@@ -47,36 +44,7 @@ bool validate_args(std::vector<std::string>& args)
     if ((args.size() == 3) && (op_args.find(args[0]) == op_args.end()))
         return false;
 
-    if (args[0] == "-sign") 
-        if ((args[1].size() > 4) || (args[2].size() > 4))
-            return false;
-
     return true;
-}
-
-void run_sign_tests(const std::string& arg1, const std::string& arg2)
-{
-    std::vector<std::string> arg_set = {arg1, arg2, "-" + arg1, "-" + arg2};
-    std::vector<char> op_set = {'a', 's', 'm', 'd'};
-
-    for (auto p:op_set) 
-        for (auto a:arg_set) 
-            for (auto b:arg_set) 
-                sign_test(p, a, b);
-}
-
-void sign_test(char op, const std::string& a1, const std::string& a2)
-{
-    std::string rs;
-    run_function(op, a1, a2, rs);
-
-    int r = std::strtol(rs.c_str(), nullptr, 10);
-    int n = run_native(op, a1, a2);
-    if (n != r) {
-        std::string s = ":";
-        std::cout << "Fail" << s << op << s << a1 << s << a2 << s << n << s << r << std::endl;
-    }
-    
 }
 
 int run_native(char op, const std::string& s1, const std::string& s2)
@@ -98,7 +66,8 @@ int run_native(char op, const std::string& s1, const std::string& s2)
     return 77777;
 }
 
-void run_function(char func, const std::string& arg1, const std::string& arg2, std::string& result)
+void run_function(char func, const std::string& arg1, const std::string& arg2, 
+                  std::string& result)
 {
     b32 op1,op2;
     op1.convert_to_b32(arg1);

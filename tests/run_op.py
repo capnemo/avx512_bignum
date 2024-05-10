@@ -6,7 +6,9 @@ import subprocess
 import timeit
 
 def usage(arg1):
-    print("Usage:", arg1, "-a|-s|-m|-d")
+    print("Usage:", arg1, '-a|-s|-m|-d')
+    print("Usage:", arg1, 'all')
+    print("Usage:", arg1, 'sign')
 
 def gen_random_number(size):
     random.seed()
@@ -89,15 +91,22 @@ def run_all():
     run_sign_tests()
         
 
+def test_signs_for_size(sz):
+    a1 = random_number_from_file(sz);
+    a2 = random_number_from_file(sz);
+    args_list = [a1, '-' + a1, a2, '-' + a2]
+    ops_list = ['-a', '-s', '-m', '-d']
+    
+    for p in ops_list:
+        for a in args_list:
+            for b in args_list:
+                run_and_compare(p, a, b)
+                run_and_compare(p, b, a)
+            
 def run_sign_tests():
     print('Running sign tests')
-    a1 = random_number_from_file(3);
-    a2 = random_number_from_file(3);
-    result = subprocess.run(["./operator_drv", '-sign', a1, a2], encoding='utf-8', 
-                            capture_output=True)
-    r = str(result.stdout).rstrip();
-    if (r != ''):
-        print(r);
+    test_signs_for_size(3)
+    test_signs_for_size(15)
     
 if __name__ == '__main__':
     if len(sys.argv) > 3 or len(sys.argv) == 1:
