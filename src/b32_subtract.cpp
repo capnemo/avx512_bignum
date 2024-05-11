@@ -3,7 +3,7 @@
 
 void b32::subtract_singles(const b32& op)
 {
-    int32_t diff = get_msb() - op.get_msb();
+    int64_t diff = (int64_t)get_msb() - (int64_t)op.get_msb();
     
     if (diff < 0)  
         diff *= -1;

@@ -25,6 +25,20 @@ def random_number_from_file(size):
     num = f.read()
     return num
 
+class random_numbers:
+    rnums = {}
+    def __init__(self, max_sz):
+        dic_sz = len(random_numbers.rnums)
+        if (dic_sz < max_sz):
+            print('Generating random numbers')
+            rnums = {}
+            for sz in range(dic_sz + 1, max_sz + 1):
+                random_numbers.rnums[sz] = random_number_from_file(sz)
+
+    @staticmethod
+    def get_rand_number(sz):
+        return random_numbers.rnums[sz]
+            
 def run_local(op, a1, a2):
     match op:
         case '-a':
@@ -55,11 +69,13 @@ def run_and_compare(op, a1, a2):
 def run_op_for_sizes(op):
     arg_sizes = [1, 2, 3, 4, 8, 10, 20, 40, 100, 200, 1000]
     start_time = timeit.default_timer()
+    rg = random_numbers(1000)
+
     for a in arg_sizes:
-        arg1 = random_number_from_file(a)
+        arg1 = rg.get_rand_number(a)
         print('Running test for', op, 'for size', a)
         for s in range(1, a + 1):
-            arg2 = random_number_from_file(s)
+            arg2 = rg.get_rand_number(s)
             run_and_compare(op, arg1, arg2)
             run_and_compare(op, arg2, arg1)
     print("Time taken for", op, "is", timeit.default_timer() - start_time)
@@ -91,11 +107,11 @@ def run_all():
     for op in ops_set:
         run_op_for_sizes(op)
     run_sign_tests()
-        
 
 def test_signs_for_size(sz):
-    a1 = random_number_from_file(sz);
-    a2 = random_number_from_file(sz);
+    rg = random_numbers(2*sz)
+    a1 = rg.get_rand_number(sz);
+    a2 = rg.get_rand_number(sz);
     args_list = [a1, '-' + a1, a2, '-' + a2]
     ops_list = ['-a', '-s', '-m', '-d']
     
