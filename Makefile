@@ -6,13 +6,17 @@ TEST_SRC=:=tests/conv_drv.cpp tests/operator_drv.cpp
 CC=g++ -c -Iincl -mavx512bw
 CC2=g++ -Iincl 
 
-debug: CC += -ggdb -Og
-debug: CC2 += -ggdb -Og
+debug: CC += -ggdb 
+debug: CC2 += -ggdb 
 debug: all
 
 release: CC += -Os
 release: CC2 += -Os
 release: all
+
+fast: CC += -Ofast
+fast: CC2 += -Ofast
+fast: all
 
 all:binX bin/b32.a tests
 
@@ -25,7 +29,7 @@ binX:
 bin/b32.a:$(OBJS)
 	ar r bin/b32.a $(OBJS)
 
-tests: tests/gen_num tests/conv_drv tests/operator_drv bin/b32.a
+tests: tests/gen_num tests/conv_drv tests/operator_drv tests/file_ops bin/b32.a
 
 tests/gen_num:tests/gen_num.cpp
 	$(CC2) $^ -o $@
@@ -36,5 +40,8 @@ tests/operator_drv:tests/operator_drv.cpp bin/b32.a
 tests/conv_drv:tests/conv_drv.cpp bin/b32.a
 	$(CC2) $^ -o $@
 
+tests/file_ops:tests/file_ops.cpp bin/b32.a
+	$(CC2) $^ -o $@
+
 clean:
-	rm -rf bin tests/operator_drv tests/gen_num tests/conv_drv
+	rm -rf bin tests/operator_drv tests/gen_num tests/conv_drv tests/file_ops
