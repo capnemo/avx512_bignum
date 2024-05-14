@@ -78,40 +78,13 @@ void add_to(vec8& acc, const vec8& n)
 
 void multiply_with_2(vec8& cp)
 {
-    vec8 np;
     int carry = 0;
     for (int i = cp.size() - 1; i >= 0; i--) {
         int tp = cp[i] * 2 + carry;
-        np.insert(np.begin(), tp % 10);
+        cp[i] = tp % 10;
         carry = tp / 10;
     }
 
     if (carry != 0)
-        np.insert(np.begin(), carry);
-
-    cp = np;
-
+        cp.insert(cp.begin(), carry);
 }
-
-#if 0
-int main(int argc, char *argv[])
-{
-    std::vector<vec32> nums = {{1, 10}, //4294967306
-                             {16,0,0,0}, //1267650600228229401496703205376
-                             {1}, //1
-                             {1023}, //1023
-                             {0xFFFFFFFF}, //2^32 - 1
-                             {32}};  //32
-   
-    //std::vector<vec32> nums = {{1, 10}}; //4294967306
-    //std::vector<vec32> nums = {{1023}}; //1023
-    //std::vector<vec32> nums = {{0xFFFFFFFF}}; //1
-    //std::vector<vec32> nums = {{0xFFFFFFFF}}; //1
-
-    for (auto c:nums) {
-        vec8 num_vec;
-        b10::convert_to_b10(c, num_vec);
-        b10::print_b10(num_vec);
-    }
-}
-#endif

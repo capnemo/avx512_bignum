@@ -41,8 +41,8 @@ bool validate_args(std::vector<std::string>& args)
     if (args.size() != 3) 
         return false;
  
-    std::set<std::string> op_args = {"-a", "-m", "-s", "-d", "-r", "-sign"};
-    if ((args.size() == 3) && (op_args.find(args[0]) == op_args.end()))
+    std::set<std::string> op_args = {"-a", "-m", "-s", "-d", "-r"};
+    if (op_args.find(args[0]) == op_args.end())
         return false;
 
     return true;

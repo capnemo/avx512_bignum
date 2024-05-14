@@ -31,7 +31,6 @@ class random_numbers:
         dic_sz = len(random_numbers.rnums)
         if (dic_sz < max_sz):
             print('Generating random numbers')
-            rnums = {}
             for sz in range(dic_sz + 1, max_sz + 1):
                 random_numbers.rnums[sz] = random_number_from_file(sz)
 
@@ -58,7 +57,7 @@ def run_and_compare(op, a1, a2):
                                 encoding='utf-8', capture_output=True)
     
     b32_result = int(str(result.stdout).rstrip())
-    if local_result != int(b32_result):
+    if local_result != b32_result:
         print('fail')
         print(a1)
         print(a2)

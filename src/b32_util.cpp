@@ -111,6 +111,9 @@ bool b32::is_unity() const
 
 void b32::shift_left_array(uint32_t width)
 {
+    if (width == 0)
+        return;
+
     shift_left(num, width%32);
 
     uint32_t element_shift = width/32;
@@ -207,9 +210,11 @@ void b32::convert_to_b32(const vec8& b10_num, bool under_zero)
     num.push_back(b10_num[sz - 1]);
     for (int i = sz - 2; i >= 0; i--) {
         power_10.multiply_with_10();
-        b32 pos({b10_num[i]});
-        pos.multiply_with(power_10);
-        add_to(pos);
+        if (b10_num[i] != 0) {
+            b32 dig = power_10;
+            dig.multiply_with_b10_digit(b10_num[i]);
+            add_to(dig);
+        }
     }
     is_negative = under_zero;
 }

@@ -32,6 +32,7 @@ class b32 {
     void add_singles(const b32& op); 
     void multiply_singles(const b32& op);
     void multiply_with_10();
+    void multiply_with_b10_digit(uint8_t digit);
     void subtract_singles(const b32& op);
     bool is_zero() const;
     void get_base10_num(std::string& str);

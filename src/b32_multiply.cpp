@@ -1,6 +1,31 @@
+#include <set>
 #include "b32.h"
 #include "b10.h"
 
+using int_vec_map = std::map<uint8_t, std::set<uint8_t>>;
+
+void b32::multiply_with_b10_digit(uint8_t digit)
+{
+    if (digit == 0) {
+        set_zero();
+        return;
+    }
+    
+    if (digit == 1) 
+        return;
+
+    std::vector<uint8_t> power_vec = {1,2,4,8};
+    b32 adnd = *this;
+    b32 sum({0});
+    for (int k = 0; k <= 3; k++) {
+        if (power_vec[k] > digit)
+            break;
+        if ((power_vec[k] & digit) != 0) 
+            sum.add_to(adnd);
+        adnd.shift_left_array(1);
+    }
+    *this = sum;
+}
 
 void b32::multiply_with_10()
 {

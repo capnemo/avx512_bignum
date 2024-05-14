@@ -32,9 +32,11 @@ int main(int argc, char *argv[])
     
     if (num_sz == 0) 
         num_sz = std::strtoull(argv[1], nullptr, 10);
-
     std::vector<uint8_t> num_list(num_sz, 0);
-    srandom(time(0));
+    
+    struct timespec tm;
+    clock_gettime(CLOCK_MONOTONIC, &tm);
+    srandom(tm.tv_nsec);
 
     int t = 0;
     while (t == 0)
