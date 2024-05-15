@@ -54,9 +54,9 @@ void add_to(vec8& acc, const vec8& n)
 
     int an = acc.size() - 1;
     int nn = n.size() - 1;
-    int carry = 0;
+    uint8_t carry = 0;
     while (nn >= 0) {
-        int tp = acc[an] + n[nn] + carry;
+        uint8_t tp = acc[an] + n[nn] + carry;
         acc[an] = tp % 10;
         carry = tp / 10;
         an--;
@@ -67,9 +67,11 @@ void add_to(vec8& acc, const vec8& n)
         return;
 
     while (an >= 0) {
-        int tp = acc[an] + carry;
+        uint8_t tp = acc[an] + carry;
         acc[an--] = tp % 10;
         carry = tp / 10;
+        if (carry == 0)
+            break;
     }
 
     if (carry != 0)  
@@ -78,9 +80,9 @@ void add_to(vec8& acc, const vec8& n)
 
 void multiply_with_2(vec8& cp)
 {
-    int carry = 0;
+    uint8_t carry = 0;
     for (int i = cp.size() - 1; i >= 0; i--) {
-        int tp = cp[i] * 2 + carry;
+        uint8_t tp = (cp[i] << 1) + carry;
         cp[i] = tp % 10;
         carry = tp / 10;
     }
