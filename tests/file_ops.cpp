@@ -14,6 +14,7 @@ void add(const b32& p1, const b32& p2, b32& r);
 void multiply(const b32& p1, const b32& p2, b32& r);
 void subtract(const b32& p1, const b32& p2, b32& r);
 void divide(const b32& p1, const b32& p2, b32& r);
+void remainder(const b32& p1, const b32& p2, b32& r);
 
 void run_function(char func, const std::string& arg1, const std::string& arg2, 
                   std::string& result);
@@ -69,7 +70,8 @@ void run_function(char func, const std::string& arg1, const std::string& arg2,
     static function_map func_map = {{'a', add}, 
                                     {'m', multiply}, 
                                     {'s', subtract}, 
-                                    {'d', divide}};
+                                    {'d', divide},
+                                    {'r', remainder}};
 
     function_map_iter f = func_map.find(func);
     if (f == func_map.end())
@@ -98,6 +100,14 @@ void subtract(const b32& p1, const b32& p2, b32& r)
 void divide(const b32& p1, const b32& p2, b32& r)
 {
     b32_operations::divide(p1, p2, r);
+}
+
+void remainder(const b32& p1, const b32& p2, b32& r)
+{
+    b32_operations::divide(p1, p2, r);
+    b32 rem;
+    r.get_remainder(rem);
+    r = rem;
 }
 
 void usage(const char* pname)

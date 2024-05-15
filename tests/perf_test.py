@@ -28,6 +28,8 @@ def run_local(op, a1, a2):
             return a1 * a2;
         case '-d':
             return a1 // a2;
+        case '-r':
+            return a1 % a2;
 
 
 def run_and_compare(op, sz, out_file):
@@ -64,7 +66,7 @@ if __name__ == '__main__':
         exit(1)
 
     op = sys.argv[1]
-    ops_set = ['-a', '-s', '-m', '-d']
+    ops_set = ['-a', '-s', '-m', '-d', '-r']
     if (op not in ops_set):
         usage(sys.argv[0])
         exit(1)
