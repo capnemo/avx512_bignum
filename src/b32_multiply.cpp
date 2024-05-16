@@ -19,7 +19,7 @@ void b32::multiply_with_b10_digit(uint8_t digit)
         return;
 
     std::vector<uint8_t> power_vec = {1,2,4,8};
-    b32 adnd = *this;
+    b32 adnd = std::move(*this);
     b32 sum({0});
     for (int k = 0; k <= 3; k++) {
         if (power_vec[k] > digit)
@@ -28,7 +28,7 @@ void b32::multiply_with_b10_digit(uint8_t digit)
             sum.add_to(adnd);
         adnd.shift_left_array(1);
     }
-    *this = sum;
+    *this = std::move(sum);
 }
 
 /*
@@ -36,14 +36,15 @@ void b32::multiply_with_b10_digit(uint8_t digit)
  */
 void b32::multiply_with_10()
 {
-    b32 base_num = *this;
+    b32 base_num = std::move(*this);
     b32 sum({0});
+
     base_num.shift_left_array(1);
     sum.add_to(base_num);
     base_num.shift_left_array(2);
     sum.add_to(base_num);
     
-    sum.get_vector(num);
+    *this = std::move(sum);
 }
 
 /*

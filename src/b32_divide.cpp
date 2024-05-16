@@ -80,7 +80,7 @@ void b32::reset_remainder()
  * Returns the remainder
  * OUT:rem
  */
-void b32::get_remainder(b32& rem)
+void b32::get_remainder(b32& rem) 
 {
-    rem = b32(remainder, false);
+    rem = b32(remainder, is_negative);
 }
