@@ -105,9 +105,12 @@ void divide(const b32& p1, const b32& p2, b32& r)
 void remainder(const b32& p1, const b32& p2, b32& r)
 {
     b32_operations::divide(p1, p2, r);
+    r.set_remainder();
+/*
     b32 rem;
     r.get_remainder(rem);
     r = rem;
+*/
 }
 
 void usage(const char* pname)

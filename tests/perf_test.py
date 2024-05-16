@@ -7,7 +7,7 @@ import timeit
 import os
 
 def usage(arg1):
-    print('Usage:', arg1, '-a|-s|-m|-d', '<size>', '<output file>')
+    print('Usage:', arg1, '-a|-s|-m|-d|-r', '<size>', '<output file>')
     print('Run operation on args of size <size>', 'and output to file <output file>')
 
 def get_random_number_file(size):

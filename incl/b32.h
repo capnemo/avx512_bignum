@@ -19,6 +19,7 @@ class b32 {
     void subtract_from(const b32& op);
     void multiply_with(const b32& op);
     void divide_by(const b32& op);
+    void set_remainder();
     void get_remainder(b32& rem);
     void reset_remainder();
 

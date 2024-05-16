@@ -84,3 +84,8 @@ void b32::get_remainder(b32& rem)
 {
     rem = b32(remainder, is_negative);
 }
+
+void b32::set_remainder() 
+{
+    num = std::move(remainder);
+}
