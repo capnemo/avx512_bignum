@@ -1,6 +1,11 @@
 #include "b32.h"
 #include "b10.h"
 
+
+/*
+ * Computes *this -= op when *this and op are <= 2^32 - 1 
+ * IN: op 
+ */
 void b32::subtract_singles(const b32& op)
 {
     int64_t diff = (int64_t)get_msb() - (int64_t)op.get_msb();
@@ -11,7 +16,10 @@ void b32::subtract_singles(const b32& op)
     num[0] = diff;
 }
 
-//*this -= op
+/*
+ * Computes *this -= op when op b32 object
+ * IN: op 
+ */
 void b32::subtract_from(const b32& op)
 {
     if (op.is_zero() == true)

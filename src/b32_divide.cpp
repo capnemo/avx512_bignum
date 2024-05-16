@@ -5,9 +5,12 @@
 // the bits from n to n - r with shifted op.
 //for x in n - r to r shift op and add to shifted_op. r is the size of op
 //Test it out by hand. For example, This will reduce the number of 
-//iterations for 2^32/2
+//iterations for 1111111111b2/2
 
-// All ops.. make sure all of them handle cases of unity and zero
+/*
+ * Computes *this /= op.
+ * IN:op
+ */
 
 void b32::divide_by(const b32& op)
 {
@@ -25,7 +28,8 @@ void b32::divide_by(const b32& op)
     resolve_signs(op);
 
     if ((get_array_size() == 1) && (op.get_array_size() == 1)) {
-        remainder[0] = get_msb() % op.get_msb();
+        remainder.clear();
+        remainder.push_back(get_msb() % op.get_msb());
         num[0] = get_msb() / op.get_msb();
         return;
     }
@@ -64,11 +68,18 @@ void b32::divide_by(const b32& op)
     quot.get_vector(num);  
 }
 
+/*
+ * Resets the remainder
+ */
 void b32::reset_remainder()
 {
     remainder = {0};
 }
 
+/*
+ * Returns the remainder
+ * OUT:rem
+ */
 void b32::get_remainder(b32& rem)
 {
     rem = b32(remainder, false);

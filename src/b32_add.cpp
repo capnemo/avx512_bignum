@@ -3,6 +3,10 @@
 #include <string.h>
 #include <bitset>
 
+/*
+ * Computes this += adnd when adnd is a uint64_t
+ * IN: adnd
+ */
 void b32::add_to(uint64_t adnd) 
 {
     split_64 t;
@@ -14,6 +18,10 @@ void b32::add_to(uint64_t adnd)
     add_to(b);
 }
 
+/*
+ * Computes this += op when *this and op are less than 2^32 - 1
+ * IN: op
+ */
 void b32::add_singles(const b32& op)
 {
     split_64 sum;
@@ -26,6 +34,10 @@ void b32::add_singles(const b32& op)
         num[0] = sum.a[0];
 }
 
+/*
+ * Computes this += op when *this and op are b32 objects
+ * IN: op
+ */
 void b32::add_to(const b32& op)
 {
     if (op.is_zero() == true)

@@ -3,6 +3,10 @@
 #include <string.h>
 #include <bitset>
 
+/*
+ * Returns if the the object is zero.
+ * OUT: true if the object is zero.
+ */
 bool b32::is_zero() const
 {
     if (num.size() == 0)
@@ -14,11 +18,9 @@ bool b32::is_zero() const
     return false;
 }
 
-void b32::shift_left_digits(uint32_t len)
-{
-    num.insert(num.end(), len, 0);
-}
-
+/*
+ * Prints the 32 bit vector (num)
+ */
 void b32::print_vec() const
 {
     for (auto m:num)
@@ -26,6 +28,9 @@ void b32::print_vec() const
     std::cout << std::endl;
 }
 
+/*
+ * Converts the b32 object to vec8 (base 10)
+ */
 void b32::get_base10_num(std::string& str)
 {
     vec8 b10_arr;
@@ -34,6 +39,9 @@ void b32::get_base10_num(std::string& str)
         str += (m + '0');
 }
 
+/*
+ * Returns the most significant part of the b32 object.
+ */
 uint32_t b32::get_msb() const
 {
     if (num.size() == 0)
@@ -42,27 +50,44 @@ uint32_t b32::get_msb() const
     return num[0];
 }
 
+/*
+ * Returns the difference between the msb of *this and cmp
+ * IN cmp
+ * OUT msb difference
+ */
 int b32::compare_msb(const b32& cmp) const
 {
     return get_msb() - cmp.get_msb();
 }
 
+/*
+ * Flips the sign of the object (+ -> - | - -> +)
+ */
 void b32::flip_sign()
 {
     is_negative = !is_negative;
 }
 
+/*
+ * Returns the size of the uint32_t array
+ */
 size_t b32::get_array_size() const
 {
     return num.size();
 }
 
+/*
+ * Returns the position of the most significant bit in the 32 bit array
+ */
 size_t b32::get_array_msb_index() const
 {
     return ((get_array_size() - 1) * 32) + get_msb_index(num[0]);
 }
 
-//To be used only for num[0] of a b32 object.
+/*
+ * Returns the position of the most significant bit of element 0 of the 
+ * 32 bit array
+ */
 size_t b32::get_msb_index(uint32_t n) const 
 {
     uint32_t mask = 0x80000000;
@@ -78,12 +103,23 @@ size_t b32::get_msb_index(uint32_t n) const
     return 0;
 }
 
+/*
+ * Set the object value to zero.
+ */
 void b32::set_zero()
 {
     num.clear();
     num.push_back(0);
+    is_negative = false;
 }
 
+/*
+ *  Returns:
+ *  > 0 if *this > cmp
+ *  0 if *this == cmp
+ *  < 0 if *this < cmp
+ *  IN: cmp, another b32 object
+ */
 int b32::compare_abs(const b32& cmp) const
 {
     size_t cm_sz = cmp.get_array_size();
@@ -101,6 +137,9 @@ int b32::compare_abs(const b32& cmp) const
     return 0;
 }
 
+/*
+ *  Returns if the object value is 1.
+ */
 bool b32::is_unity() const
 {
     if ((num.size() == 1) && (num[0] == 1))
@@ -109,6 +148,10 @@ bool b32::is_unity() const
     return false;
 }
 
+/*
+ *  Shifts the entire uint32_t array left by width bits.
+ *  IN: width, shift width
+ */
 void b32::shift_left_array(uint32_t width)
 {
     if (width == 0)
@@ -121,6 +164,10 @@ void b32::shift_left_array(uint32_t width)
         num.insert(num.end(), element_shift, 0);
 }
 
+/*
+ *  Shifts the entire uint32_t array left by width bits.
+ *  IN: width, shift width. width <= 32
+ */
 void b32::shift_left(vec32& digits, uint8_t width)
 {
     if (width == 0)
@@ -139,6 +186,10 @@ void b32::shift_left(vec32& digits, uint8_t width)
         digits.erase(digits.begin());
 }
 
+/*
+ *  Shifts the entire uint32_t array right by width bits.
+ *  IN: width, shift width
+ */
 void b32::shift_right_array(uint32_t width)
 {
     if (width == 0)
@@ -151,6 +202,10 @@ void b32::shift_right_array(uint32_t width)
     shift_right(num, width%32);
 }
 
+/*
+ *  Shifts the entire uint32_t array right by width bits.
+ *  IN: width, shift width. width <= 32
+ */
 void b32::shift_right(vec32& digits, uint8_t width)
 {
     uint32_t mask = (0xFFFFFFFF << (32 - width)) >> (32 - width);
@@ -165,6 +220,9 @@ void b32::shift_right(vec32& digits, uint8_t width)
     digits[0] >>= width;
 }
 
+/*
+ * Prints the uint32_t array as a base 2 number.
+ */
 void b32::print_bits() const
 {
     for (auto m:num) {
@@ -174,6 +232,9 @@ void b32::print_bits() const
     std::cout << std::endl;
 }
 
+/*
+ * Removes leading zeros from the uint32_t array.
+ */
 void b32::trim_leading_zeros()
 {
     int i = 0;
@@ -184,6 +245,10 @@ void b32::trim_leading_zeros()
         num.erase(num.begin(), num.begin() + i);
 }
 
+/* 
+ * Converts b10_num to a uint32_t array and instantiates *this with it.
+ * IN b10_num
+ */
 void b32::convert_to_b32(const std::string& b10_num)
 {
     bool is_neg = false;
@@ -200,6 +265,11 @@ void b32::convert_to_b32(const std::string& b10_num)
     convert_to_b32(b10_vec, is_neg);
 }
 
+/* 
+ * Converts uint8_t array to a uint32_t array and instantiates *this with it.
+ * IN: b10_num: uint8_t array
+ * IN: under_zero: Sign of the number
+ */
 void b32::convert_to_b32(const vec8& b10_num, bool under_zero)
 {
     b32 power_10({1});
@@ -219,6 +289,11 @@ void b32::convert_to_b32(const vec8& b10_num, bool under_zero)
     is_negative = under_zero;
 }
 
+/*
+ * Resolves sign prior to an operation. Use for multiplication and division
+ * only.
+ * IN: cmp: another b32 object
+ */
 void b32::resolve_signs(const b32& cmp)
 {
     if (is_less_than_zero() == cmp.is_less_than_zero()) {

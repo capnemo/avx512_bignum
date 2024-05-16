@@ -4,6 +4,10 @@
 
 using int_vec_map = std::map<uint8_t, std::set<uint8_t>>;
 
+/*
+ *  Computes *this *= digit when digit >= 0 and < 10.
+ *  IN:digit
+ */
 void b32::multiply_with_b10_digit(uint8_t digit)
 {
     if (digit == 0) {
@@ -27,6 +31,9 @@ void b32::multiply_with_b10_digit(uint8_t digit)
     *this = sum;
 }
 
+/*
+ *  Computes *this *= 10 
+ */
 void b32::multiply_with_10()
 {
     b32 base_num = *this;
@@ -39,6 +46,10 @@ void b32::multiply_with_10()
     sum.get_vector(num);
 }
 
+/*
+ *  Computes *this *= op when *this and op are less than 2^32 - 1
+ *  IN:op 
+ */
 void b32::multiply_singles(const b32& op)
 {
     split_64 prod;
@@ -51,6 +62,10 @@ void b32::multiply_singles(const b32& op)
         num[0] = prod.a[0];
 }
 
+/*
+ *  Computes *this *= op when op is a b32 object
+ *  IN:op 
+ */
 void b32::multiply_with(const b32& op)
 {
     if (is_zero() == true)
