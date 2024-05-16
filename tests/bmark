@@ -1,0 +1,64 @@
+chandra@falcon:tests $ ./run_op.py all
+Generating random numbers
+Running test for -a for size 1
+Running test for -a for size 2
+Running test for -a for size 3
+Running test for -a for size 4
+Running test for -a for size 8
+Running test for -a for size 10
+Running test for -a for size 20
+Running test for -a for size 40
+Running test for -a for size 100
+Running test for -a for size 200
+Running test for -a for size 1000
+Time taken for -a is 10.737004224967677
+Running test for -s for size 1
+Running test for -s for size 2
+Running test for -s for size 3
+Running test for -s for size 4
+Running test for -s for size 8
+Running test for -s for size 10
+Running test for -s for size 20
+Running test for -s for size 40
+Running test for -s for size 100
+Running test for -s for size 200
+Running test for -s for size 1000
+Time taken for -s is 9.772062422998715
+Running test for -m for size 1
+Running test for -m for size 2
+Running test for -m for size 3
+Running test for -m for size 4
+Running test for -m for size 8
+Running test for -m for size 10
+Running test for -m for size 20
+Running test for -m for size 40
+Running test for -m for size 100
+Running test for -m for size 200
+Running test for -m for size 1000
+Time taken for -m is 18.71064472105354
+Running test for -d for size 1
+Running test for -d for size 2
+Running test for -d for size 3
+Running test for -d for size 4
+Running test for -d for size 8
+Running test for -d for size 10
+Running test for -d for size 20
+Running test for -d for size 40
+Running test for -d for size 100
+Running test for -d for size 200
+Running test for -d for size 1000
+Time taken for -d is 5.616160490026232
+Running test for -r for size 1
+Running test for -r for size 2
+Running test for -r for size 3
+Running test for -r for size 4
+Running test for -r for size 8
+Running test for -r for size 10
+Running test for -r for size 20
+Running test for -r for size 40
+Running test for -r for size 100
+Running test for -r for size 200
+Running test for -r for size 1000
+Time taken for -r is 6.5397335269954056
+Running sign tests
+chandra@falcon:tests $ 

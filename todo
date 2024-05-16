@@ -1,0 +1,4 @@
+Performance improvements b10->b32 and b32->b10
+Detect the lack of avx512 extensions and switch to non avx512 code at runtime.
+Expression parser
+Exponent -- low priority.
