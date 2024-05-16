@@ -114,12 +114,6 @@ void get_remainder(b32& p1, const b32& p2)
 {
     p1.divide_by(p2);
     p1.set_remainder();
-/*
-    b32 r;
-    p1.get_remainder(r);
-    p1.reset_remainder();
-    p1 = r;
-*/
 }
 
 void usage(const char* pname)
