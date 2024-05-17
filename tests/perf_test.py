@@ -7,8 +7,8 @@ import timeit
 import os
 
 def usage(arg1):
-    print('Usage:', arg1, '-a|-s|-m|-d|-r', '<size>', '<output file>')
-    print('Run operation on args of size <size>', 'and output to file <output file>')
+    print('Usage:', arg1, '-a|-s|-m|-d|-r', '<size1> <size2>', '<output file>')
+    print('Run operation on args of sizes <size1> <size2> and output to file <output file>')
 
 def get_random_number_file(size):
     rand_file = subprocess.run(["./gen_num", str(size)], encoding='utf-8', 
@@ -31,10 +31,9 @@ def run_local(op, a1, a2):
         case '-r':
             return a1 % a2;
 
-
-def run_and_compare(op, sz, out_file):
-    f1,a1 = get_random_number_file(sz)
-    f2,a2 = get_random_number_file(sz)
+def run_and_compare(op, sz1, sz2, out_file):
+    f1,a1 = get_random_number_file(sz1)
+    f2,a2 = get_random_number_file(sz2)
 
     print("Running the operation locally")
     local_result = run_local(op, a1, a2)
@@ -60,8 +59,8 @@ def run_and_compare(op, sz, out_file):
 
     
 if __name__ == '__main__':
-    sys.set_int_max_str_digits(1000000)
-    if len(sys.argv) != 4:
+    sys.set_int_max_str_digits(10000000)
+    if len(sys.argv) != 5:
         usage(sys.argv[0])
         exit(1)
 
@@ -71,5 +70,7 @@ if __name__ == '__main__':
         usage(sys.argv[0])
         exit(1)
 
-    arg_size = int(sys.argv[2])
-    run_and_compare(op, arg_size, sys.argv[3])
+    arg_size1 = int(sys.argv[2])
+    arg_size2 = int(sys.argv[3])
+    run_and_compare(op, arg_size1, arg_size2, sys.argv[4])
+
