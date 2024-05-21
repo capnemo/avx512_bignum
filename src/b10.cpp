@@ -2,7 +2,8 @@
 #include "b10.h"
 
 void add_to(vec8& acc, const vec8& n); 
-void multiply_with_2(vec8& cp);
+void b10_multiply(vec8& m1, const vec8& m2);
+void b32_to_b10(uint64_t b32_num, vec8& b10_num);
 
 namespace b10 {
     
@@ -22,23 +23,24 @@ namespace b10 {
      */
     void convert_to_b10(const vec32& num, vec8& n10) 
     {
-        vec8 cp2 = {1};
-        for (int i = num.size() - 1; i >= 0; i--) {
-            uint32_t current_byte = num[i];
-            uint32_t mask = 1;
-            for (int i = 0; i < 32; i++) {
-                if ((mask & current_byte) == mask)  
-                    add_to(n10, cp2);
-                mask = mask << 1;
-                multiply_with_2(cp2);
-            }
+        uint64_t base_32 = (uint64_t)(0x100000000);
+        vec8 base_vec;
+        b32_to_b10(base_32, base_vec);
+        vec8 base_exponent = {1};
+        b32_to_b10(num[num.size() - 1], n10);
+        for (int i = num.size() - 2; i >= 0; i--) {
+            vec8 current_dw;
+            b32_to_b10(num[i], current_dw);
+            b10_multiply(base_exponent, base_vec);
+            b10_multiply(current_dw, base_exponent);
+            add_to(n10, current_dw);
         }
     }
-    
+
     /* Converts a uint32_t vector to a string
      * IN: num
      * OUT: n10
-     */
+      */
     void convert_to_b10(const b32& num, std::string& n10)
     {
         vec8 digs_b10;
@@ -58,6 +60,19 @@ namespace b10 {
     }
 
 } //namespace
+
+/*  Turns a 32 bit number into a b10 vector
+ *  IN: b32_num, 32 bit number
+ *  OUT: b10_num 
+ */
+void b32_to_b10(uint64_t b32_num, vec8& b10_num)
+{
+    b10_num.reserve(9);
+    while (b32_num > 0) {
+        b10_num.insert(b10_num.begin(), b32_num % 10);
+        b32_num /= 10;
+    }
+}
 
 /* Adds two uint8_t vectors. The result is in acc
  * IN: acc, n
@@ -94,19 +109,40 @@ void add_to(vec8& acc, const vec8& n)
         acc.insert(acc.begin(), 1, carry);
 }
 
-/* Multiplies a uint8_t vectors with 2. 
- * IN: cp
- * OUT: cp
+/* Computes m1 *= m2 in base 10.
+ * IN: m1, m2
+ * OUT: m1
  */
-void multiply_with_2(vec8& cp)
+void b10_multiply(vec8& m1, const vec8& m2)
 {
-    uint8_t carry = 0;
-    for (int i = cp.size() - 1; i >= 0; i--) {
-        uint8_t tp = (cp[i] << 1) + carry;
-        cp[i] = tp % 10;
-        carry = tp / 10;
+    if (m2.size() == 0)
+        return;
+
+    int m1_sz = m1.size();
+    int m2_sz = m2.size();
+    std::vector<uint32_t> prod_list((m1_sz + m2_sz - 1), 0);
+    for (int i = 0; i < m1.size(); i++) {
+        if (m1[i] == 0)
+            continue;       
+    for (int j = 0; j < m2.size(); j++) {
+        if (m2[j] == 0)
+            continue;
+        prod_list[i + j] += m1[i] * m2[j];
+        }
+    }
+
+    uint32_t carry = 0;
+    for (int i = prod_list.size() - 1; i >= 0; i--) {
+        uint32_t tp = prod_list[i] + carry;
+        prod_list[i] = tp % 10;
+       carry = tp / 10;
     }
 
     if (carry != 0)
-        cp.insert(cp.begin(), carry);
+        prod_list.insert(prod_list.begin(), carry);
+
+    m1.clear();
+    m1.reserve(prod_list.size());
+    for (auto m:prod_list) 
+        m1.push_back(m);
 }
