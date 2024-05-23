@@ -279,7 +279,7 @@ void b32::convert_to_b32(const vec8& b10_num, bool under_zero)
     num.clear();
     num.push_back(b10_num[sz - 1]);
     for (int i = sz - 2; i >= 0; i--) {
-        power_10.multiply_with_10();
+        power_10.multiply_with_b10_digit(10);
         if (b10_num[i] != 0) {
             b32 dig = power_10;
             dig.multiply_with_b10_digit(b10_num[i]);

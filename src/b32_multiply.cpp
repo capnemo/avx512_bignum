@@ -18,6 +18,29 @@ void b32::multiply_with_b10_digit(uint8_t digit)
     if (digit == 1) 
         return;
 
+    uint32_t carry = 0;
+    for (int i = num.size() - 1; i >= 0; i--) {
+        split_64 p;
+        p.w = ((uint64_t)num[i] * (uint64_t)digit) + (uint64_t)carry;
+        carry = p.a[1];
+        num[i] = p.a[0];
+    }
+
+    if (carry != 0) 
+        num.insert(num.begin(), carry);
+}
+
+#if 0
+void b32::multiply_with_b10_digit(uint8_t digit)
+{
+    if (digit == 0) {
+        set_zero();
+        return;
+    }
+    
+    if (digit == 1) 
+        return;
+
     std::vector<uint8_t> power_vec = {1,2,4,8};
     b32 adnd = std::move(*this);
     b32 sum({0});
@@ -30,6 +53,7 @@ void b32::multiply_with_b10_digit(uint8_t digit)
     }
     *this = std::move(sum);
 }
+#endif
 
 /*
  *  Computes *this *= 10 
