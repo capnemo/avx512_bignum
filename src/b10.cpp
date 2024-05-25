@@ -1,13 +1,10 @@
 #include <iostream>
 #include "b10.h"
 
-void add_to(vec8& acc, const vec8& n); 
 void b10_multiply(vec32& m1, const vec32& m2);
 void b32_to_b10(uint64_t b32_num, vec32& b10_num);
 void accumulate(vec32& acc, vec32& n);
 bool is_zero(const vec32& v);
-void print_vec_8(const vec8& v);
-void print_vec_32(const vec32& v);
 void normalize_to_b10(vec32& v32);
 
 namespace b10 {
@@ -81,22 +78,34 @@ void accumulate(vec32& acc, vec32& n)
         return;
     }
 
-    int sz = std::min(n.size(), acc.size()) - 1;
-    if (n.size() > acc.size())  {
-        bool is_acc_zero = (acc.size() == 0) ? true:false;
-        acc.insert(acc.begin(), n.begin(), 
-                   n.begin() + n.size() - acc.size());
-        if (is_acc_zero == true)
-            return;
-    }
+    if (n.size() > acc.size())  
+        acc.insert(acc.begin(), n.size() - acc.size(), 0);
 
     int ac_in = acc.size() - 1;
     int n_in = n.size() - 1;
-    while (sz >= 0) {
-        acc[ac_in--] += n[n_in--];
-        sz--;
+    uint64_t carry = 0;
+    while (n_in >= 0) {
+        uint64_t tp = (uint64_t)acc[ac_in] + (uint64_t)n[n_in] + carry;
+        acc[ac_in] = tp % 10;
+        carry = tp / 10;
+        ac_in--;
+        n_in--;
     }
-    normalize_to_b10(acc);
+    
+    while (ac_in >= 0) {
+        if (carry == 0)
+            break;
+        uint64_t tp = acc[ac_in] + carry;
+        acc[ac_in] = tp % 10;
+        carry = acc[ac_in] / 10;
+        ac_in--;
+    }
+
+    if (carry != 0) {
+        vec32 dig_vec;
+        b32_to_b10(carry, dig_vec);
+        acc.insert(acc.begin(), dig_vec.begin(), dig_vec.end());
+    }
 }
 
 /*  Turns a 32 bit number into a b10 vector
@@ -117,41 +126,6 @@ void b32_to_b10(uint64_t b32_num, vec32& b10_num)
     }
 }
 
-/* Adds two uint8_t vectors. The result is in acc
- * IN: acc, n
- * OUT: acc
- */
-void add_to(vec8& acc, const vec8& n) 
-{
-    if (acc.size() < n.size()) 
-        acc.insert(acc.begin(), n.size() - acc.size(), 0);
-
-    int an = acc.size() - 1;
-    int nn = n.size() - 1;
-    uint8_t carry = 0;
-    while (nn >= 0) {
-        uint8_t tp = acc[an] + n[nn] + carry;
-        acc[an] = tp % 10;
-        carry = tp / 10;
-        an--;
-        nn--;
-    }
-
-    if (carry == 0)
-        return;
-
-    while (an >= 0) {
-        uint8_t tp = acc[an] + carry;
-        acc[an--] = tp % 10;
-        carry = tp / 10;
-        if (carry == 0)
-            break;
-    }
-
-    if (carry != 0)  
-        acc.insert(acc.begin(), 1, carry);
-}
-
 /* Computes m1 *= m2 in base 10.
  * IN: m1, m2
  * OUT: m1
@@ -170,9 +144,12 @@ void b10_multiply(vec32& m1, const vec32& m2)
     int m1_sz = m1.size();
     int m2_sz = m2.size();
     std::vector<uint64_t> prod_list((m1_sz + m2_sz - 1), 0);
-    for (int i = 0; i < m1.size(); i++) 
+    for (int i = 0; i < m1.size(); i++)  {
+        if (m1[i] == 0)
+            continue;
         for (int j = 0; j < m2.size(); j++) 
             prod_list[i + j] += (uint64_t)m1[i] * (uint64_t)m2[j];
+    }
 
     m1.clear();
     m1.insert(m1.begin(), prod_list.begin(), prod_list.end());
@@ -195,17 +172,6 @@ void normalize_to_b10(vec32& v32)
     }
 }
 
-bool is_zero(const vec8& v)
-{
-    if (v.size() == 0)
-        return true;
-    
-    if ((v.size() == 1) && (v[0] == 0)) 
-        return true;
-
-    return false;
-}
-
 bool is_zero(const vec32& v)
 {
     if (v.size() == 0)
@@ -215,20 +181,4 @@ bool is_zero(const vec32& v)
         return true;
 
     return false;
-}
-
-void print_vec_32(const vec32& v) 
-{
-    for (auto m:v)
-        std::cout << m << " ";
-
-    std::cout << std::endl;
-}
-
-void print_vec_8(const vec8& v) 
-{
-    for (auto m:v)
-        std::cout << (int)m << " ";
-
-    std::cout << std::endl;
 }
