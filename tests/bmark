@@ -11,7 +11,7 @@ Running test for -a for size 40
 Running test for -a for size 100
 Running test for -a for size 200
 Running test for -a for size 1000
-Time taken for -a is 5.094774379002047
+Time taken for -a is 4.895523970000795
 Running test for -s for size 1
 Running test for -s for size 2
 Running test for -s for size 3
@@ -23,7 +23,7 @@ Running test for -s for size 40
 Running test for -s for size 100
 Running test for -s for size 200
 Running test for -s for size 1000
-Time taken for -s is 4.150766720995307
+Time taken for -s is 3.9810298169904854
 Running test for -m for size 1
 Running test for -m for size 2
 Running test for -m for size 3
@@ -35,7 +35,7 @@ Running test for -m for size 40
 Running test for -m for size 100
 Running test for -m for size 200
 Running test for -m for size 1000
-Time taken for -m is 7.352033853996545
+Time taken for -m is 6.9875267110037385
 Running test for -d for size 1
 Running test for -d for size 2
 Running test for -d for size 3
@@ -47,7 +47,7 @@ Running test for -d for size 40
 Running test for -d for size 100
 Running test for -d for size 200
 Running test for -d for size 1000
-Time taken for -d is 3.61359804100357
+Time taken for -d is 3.596350018007797
 Running test for -r for size 1
 Running test for -r for size 2
 Running test for -r for size 3
@@ -59,7 +59,6 @@ Running test for -r for size 40
 Running test for -r for size 100
 Running test for -r for size 200
 Running test for -r for size 1000
-Time taken for -r is 3.820298279999406
+Time taken for -r is 3.777763745994889
 Running sign tests
-chandra@falcon:tests $ 
 
