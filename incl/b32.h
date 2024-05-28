@@ -19,6 +19,7 @@ class b32 {
     void subtract_from(const b32& op);
     void multiply_with(const b32& op);
     void divide_by(const b32& op);
+
     void set_remainder();
     void get_remainder(b32& rem);
     void reset_remainder();
@@ -27,6 +28,9 @@ class b32 {
     void set_vector(const vec32& num_vec) { num = num_vec;}
     bool is_less_than_zero() const { return is_negative; }
     void print_vec() const;
+    bool is_zero() const;
+    uint32_t get_msb() const;
+    uint32_t get_remainder_msb() { return remainder[0]; }
 
     private:
     void convert_to_b32(const vec8& b10_num, bool under_zero = false);
@@ -35,7 +39,6 @@ class b32 {
     void multiply_with_10();
     void multiply_with_b10_digit(uint8_t digit);
     void subtract_singles(const b32& op);
-    bool is_zero() const;
     void get_base10_num(std::string& str);
     void flip_sign();
     void set_zero();
@@ -48,7 +51,6 @@ class b32 {
     void trim_leading_zeros();
     size_t get_array_size() const;
     size_t get_msb_index(uint32_t n) const;
-    uint32_t get_msb() const;
     int compare_msb(const b32& cmp) const;
     size_t get_array_msb_index() const;
     int compare_abs(const b32& cmp) const;
