@@ -1,5 +1,6 @@
 #include <iostream>
 #include "b10.h"
+#include "b32.h"
 
 void b10_multiply(vec32& m1, const vec32& m2);
 void b32_to_b10(uint64_t b32_num, vec32& b10_num);
@@ -35,6 +36,7 @@ namespace b10 {
             vec32 current_dw;
             b32_to_b10(num[i], current_dw);
             b10_multiply(base_exponent, base_vec);
+            normalize_to_b10(base_exponent);
             b10_multiply(current_dw, base_exponent);
             accumulate(totals, current_dw);
         }
@@ -43,10 +45,25 @@ namespace b10 {
         n10.insert(n10.begin(), totals.begin(), totals.end());
     }
 
-    /* Converts a uint32_t vector to a string
+    /* Converts a uint32_t vector to a base 10 string using b32::divide_by
+     * Immeasurably inefficient. Optimizing divide_by might make it better
      * IN: num
      * OUT: n10
-      */
+     */
+    void convert_to_b10_divide(const b32& num, std::string& n10)
+    {
+        b32 nmtor = num;
+        b32 dntor({10});
+        while(nmtor.is_zero() == false) {
+            nmtor.divide_by(dntor);
+            n10.insert(n10.begin(), nmtor.get_remainder_msb() + '0');
+        }
+    }
+
+    /* Converts a uint32_t vector to a base 10 string
+     * IN: num
+     * OUT: n10
+     */
     void convert_to_b10(const b32& num, std::string& n10)
     {
         vec8 digs_b10;
@@ -153,7 +170,7 @@ void b10_multiply(vec32& m1, const vec32& m2)
 
     m1.clear();
     m1.insert(m1.begin(), prod_list.begin(), prod_list.end());
-    normalize_to_b10(m1);
+    //normalize_to_b10(m1);
 }
 
 void normalize_to_b10(vec32& v32)
