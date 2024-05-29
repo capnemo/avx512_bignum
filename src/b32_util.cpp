@@ -272,6 +272,11 @@ void b32::convert_to_b32(const std::string& b10_num)
  */
 void b32::convert_to_b32(const vec8& b10_num, bool under_zero)
 {
+    if (b10_num.size() == 0) {
+        num.push_back(0);
+        return;
+    }
+
     b32 power_10({1});
     b32 num_10({10});
 

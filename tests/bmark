@@ -61,4 +61,8 @@ Running test for -r for size 200
 Running test for -r for size 1000
 Time taken for -r is 3.777763745994889
 Running sign tests
+chandra@falcon:tests $ ./conv_drv -f $(./gen_num 500000)
+b10 -> b32 30
+b32 -> b10 106
+pass
 

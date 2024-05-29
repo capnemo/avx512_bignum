@@ -29,6 +29,11 @@ int main(int argc, char *argv[])
     if (file_out == false) 
         input_number = second_arg;
         
+    if (input_number == "") {
+        std::cout << "Error reading the number" << std::endl;
+        return -1;
+    }
+
     b32 bnum;
     time_t st = time(0);
     bnum.convert_to_b32(input_number);
@@ -66,6 +71,7 @@ void write_file(const std::string& file_name, std::string& num)
 
 void read_file(const char* file_name, std::string& num)
 {
+    num = "";
     std::ifstream fhandle(file_name);
     if (fhandle) 
         fhandle >> num;
