@@ -1,0 +1,8 @@
+bin/
+tests/conv_drv
+tests/file_ops
+tests/gen_num
+tests/num.b10.in
+tests/num.b10.out
+tests/num.b32.out
+tests/operator_drv
