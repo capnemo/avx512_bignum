@@ -3,6 +3,7 @@ avx512_bignum is a fast, infinite precision library built around the avx512
 extensions to the x86 instruction set. 
 
 Prerequisites
+-------------
 a) Hardware that supports avx512 running a recent linux distribution.
 b) g++ version >= 13.2.1
 c) python version >= 3.12.3
