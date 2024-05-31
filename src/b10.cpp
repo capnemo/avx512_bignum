@@ -74,6 +74,7 @@ namespace b10 {
         while(nmtor.is_zero() == false) {
             nmtor.divide_by(dntor);
             uint32_t rem = nmtor.get_remainder_msb();
+
             std::string rem_str;
             b32_to_string(rem, rem_str);
 
