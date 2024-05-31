@@ -4,6 +4,7 @@
 
 void b10_multiply(vec32& m1, const vec32& m2);
 void b32_to_b10(uint64_t b32_num, vec32& b10_num);
+void b32_to_string(uint32_t b32_num, std::string& b10_str);
 void accumulate(vec32& acc, vec32& n);
 bool is_zero(const vec32& v);
 void normalize_to_b10(vec32& v32);
@@ -45,7 +46,7 @@ namespace b10 {
         n10.insert(n10.begin(), totals.begin(), totals.end());
     }
 
-    /* Converts a uint32_t vector to a base 10 string using b32::divide_by
+    /* Converts a b32 object to a base 10 string using b32::divide_by
      * Immeasurably inefficient. Optimizing divide_by might make it better
      * IN: num
      * OUT: n10
@@ -57,6 +58,29 @@ namespace b10 {
         while(nmtor.is_zero() == false) {
             nmtor.divide_by(dntor);
             n10.insert(n10.begin(), nmtor.get_remainder_msb() + '0');
+        }
+    }
+
+    /* Converts a b32 object to a base 10 string using b32::divide_by
+     * About 9x faster than convert_to_b10_divide but not as fast as
+     * convert_to_b10
+     * IN: num
+     * OUT: n10
+     */
+    void convert_to_b10_v3(const b32& num, std::string& n10)
+    {
+        b32 nmtor = num;
+        b32 dntor({1'000'000'000});
+        while(nmtor.is_zero() == false) {
+            nmtor.divide_by(dntor);
+            uint32_t rem = nmtor.get_remainder_msb();
+            std::string rem_str;
+            b32_to_string(rem, rem_str);
+
+            if (nmtor.is_zero() == false) 
+                rem_str.insert(0, 9 - rem_str.size(), '0');
+
+            n10.insert(0, rem_str);
         }
     }
 
@@ -143,6 +167,20 @@ void b32_to_b10(uint64_t b32_num, vec32& b10_num)
     }
 }
 
+void b32_to_string(uint32_t b32_num, std::string& b10_str)
+{
+    if (b32_num == 0) {
+        b10_str = "0";
+        return;
+    }
+          
+    b10_str = "";
+    while (b32_num > 0) {
+        b10_str.insert(0, 1, b32_num % 10 + '0');
+        b32_num /= 10;
+    }
+}
+
 /* Computes m1 *= m2 in base 10.
  * IN: m1, m2
  * OUT: m1
@@ -170,7 +208,6 @@ void b10_multiply(vec32& m1, const vec32& m2)
 
     m1.clear();
     m1.insert(m1.begin(), prod_list.begin(), prod_list.end());
-    //normalize_to_b10(m1);
 }
 
 void normalize_to_b10(vec32& v32)
