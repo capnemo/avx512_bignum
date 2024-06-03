@@ -139,7 +139,7 @@ void accumulate(vec32& acc, vec32& n)
             break;
         uint64_t tp = acc[ac_in] + carry;
         acc[ac_in] = tp % 10;
-        carry = acc[ac_in] / 10;
+        carry = tp / 10;
         ac_in--;
     }
 
