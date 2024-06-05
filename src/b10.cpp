@@ -21,13 +21,6 @@ namespace b10 {
         printf("\n");
     }
 
-    void print_b10(const vec32& num)
-    {
-        for (auto n:num)
-            printf("%u ", n);
-        printf("\n");
-    }
-
     /* Converts a uint32_t vector to a uint8_t vector
      * IN: num
      * OUT: n10
@@ -49,20 +42,8 @@ namespace b10 {
             accumulate(totals, current_dw);
         }
 
-        n10 = vec8(totals.size(), 0);
-        uint64_t carry = 0;
-        for (int i = totals.size() - 1; i >= 0; i--) {
-            uint64_t tp = totals[i] + carry;
-            carry = tp / (uint64_t)10;
-            n10[i] = tp % (uint64_t)10;
-        }
-
-        std::cout << "CARRY " << carry << std::endl;
-        if (carry != 0) {
-            vec32 dig_vec;
-            b32_to_b10(carry, dig_vec);
-            n10.insert(n10.begin(), dig_vec.begin(), dig_vec.end());
-        }
+        n10.clear();
+        n10.insert(n10.begin(), totals.begin(), totals.end());
     }
 
     /* Converts a b32 object to a base 10 string using b32::divide_by
@@ -130,55 +111,6 @@ namespace b10 {
 
 void accumulate(vec32& acc, vec32& n)
 {
-    if (is_zero(n) == true)
-        return;
-
-    if (is_zero(acc) == true) {
-        acc = n;
-        return;
-    }
-
-    vec32* lg_ptr;
-    vec32* sm_ptr;
-    if (acc.size() >= n.size()) {
-        lg_ptr = &acc;
-        sm_ptr = &n;
-    } else {
-        lg_ptr = &n;
-        sm_ptr = &acc;
-    }
-
-    vec32& lg_vec = *lg_ptr;
-    vec32& sm_vec = *sm_ptr;
-    std::vector<uint32_t> sum_vec;
-    int lg_in = lg_vec.size() - 1;
-    int sm_in = sm_vec.size() - 1;
-    uint32_t carry = 0;
-    while (sm_in >= 0) {
-        split_64 tp;
-        tp.w = lg_vec[lg_in] + sm_vec[sm_in] + carry;
-        carry = tp.a[1];
-        lg_vec[lg_in] = tp.a[0];
-        lg_in--;
-        sm_in--;
-    }
-
-    while (lg_in >= 0) {
-        split_64 tp;
-        tp.w = lg_vec[lg_in] + carry;
-        carry = tp.a[1];
-        lg_vec[lg_in--] = tp.a[0];
-    }
-
-    if (carry != 0)
-        lg_vec.insert(lg_vec.begin(), carry);
-
-    acc = lg_vec; //Do it only in case n.size > acc.size. Rethink.
-}
-
-#if 0
-void accumulate(vec32& acc, vec32& n)
-{
     if (is_zero(n) == true) 
         return;
 
@@ -217,7 +149,6 @@ void accumulate(vec32& acc, vec32& n)
         acc.insert(acc.begin(), dig_vec.begin(), dig_vec.end());
     }
 }
-#endif
 
 /*  Turns a 32 bit number into a b10 vector
  *  IN: b32_num, 32 bit number
@@ -272,25 +203,12 @@ void b10_multiply(vec32& m1, const vec32& m2)
     for (int i = 0; i < m1.size(); i++)  {
         if (m1[i] == 0)
             continue;
-        for (int j = 0; j < m2.size(); j++)
+        for (int j = 0; j < m2.size(); j++) 
             prod_list[i + j] += (uint64_t)m1[i] * (uint64_t)m2[j];
     }
 
-    m1 = vec32(prod_list.size(), 0);
-    uint32_t carry = 0;
-    for (int i = prod_list.size() - 1; i >= 0; i--) {
-        split_64 n64;
-        n64.w = prod_list[i];
-        m1[i] = n64.a[0];
-        carry = n64.a[1];
-    }
-
-    if (carry != 0)
-        m1.insert(m1.begin(), carry);
-    /*
     m1.clear();
     m1.insert(m1.begin(), prod_list.begin(), prod_list.end());
-    */
 }
 
 void normalize_to_b10(vec32& v32)
