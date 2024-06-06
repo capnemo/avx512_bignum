@@ -2,7 +2,8 @@
 #include "b10.h"
 #include "b32.h"
 
-void b32_to_b10(uint64_t b32_num, vec32& b10_num);
+template <typename T>
+void b32_to_b10(uint64_t b32_num, T& b10_num);
 void accumulate(vec32& acc, vec32& n);
 bool is_zero(const vec32& v);
 void raise_base(vec32& current_power);
@@ -21,7 +22,7 @@ namespace b10 {
         printf("\n");
     }
 
-    void print_b10(const vec32 num)
+    void print_b10(const vec32& num)
     {
         for (auto n:num)
             printf("%u ", n);
@@ -52,11 +53,8 @@ namespace b10 {
             n10[i] = tp % (uint64_t)10;
         }
 
-        if (carry != 0) {
-            vec32 dig_vec;
-            b32_to_b10(carry, dig_vec);
-            n10.insert(n10.begin(), dig_vec.begin(), dig_vec.end());
-        }
+        if (carry != 0) 
+            b32_to_b10(carry, n10);
     }
 
     /* Converts a uint32_t vector to a base 10 string
@@ -91,6 +89,7 @@ void insert_at_head(uint32_t element, vec32& element_array)
         element_array.insert(element_array.begin(), dig_vec.begin(), dig_vec.end());
     }
 }
+
 void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod)
 {
     
@@ -98,8 +97,8 @@ void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod)
     uint64_t carry = 0;
     for (int i = base_exp.size() - 1; i >= 0; i--) {
         uint64_t p = ((uint64_t)base_exp[i] * (uint64_t)p_val) + (uint64_t)carry;
-        prod[i] = p % (uint64_t)10;
-        carry = p / (uint64_t)10;
+        prod[i] = p % 10;
+        carry = p / 10;
     }
 
     insert_at_head(carry, prod);
@@ -111,8 +110,8 @@ void raise_base(vec32& current_power)
     uint64_t carry = 0;
     for (int i = current_power.size() - 1; i >= 0; i--) {
         uint64_t tp = (uint64_t)current_power[i] * base + carry;
-        carry = tp / (uint64_t)10;
-        current_power[i] = tp % (uint64_t)10;
+        carry = tp / 10;
+        current_power[i] = tp % 10;
     }
 
     insert_at_head(carry, current_power);
@@ -170,7 +169,8 @@ void accumulate(vec32& acc, vec32& n)
  *  IN: b32_num, 32 bit number
  *  OUT: b10_num 
  */
-void b32_to_b10(uint64_t b32_num, vec32& b10_num)
+template <typename T>
+void b32_to_b10(uint64_t b32_num, T& b10_num)
 {
     if (b32_num == 0) {
         b10_num.push_back(0);
