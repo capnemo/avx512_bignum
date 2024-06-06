@@ -1,5 +1,6 @@
 #include "b10.h"
  
+void b32_to_string(uint32_t b32_num, std::string& b10_str);
 namespace b10 {   
     /* Converts a b32 object to a base 10 string using b32::divide_by
      * Immeasurably inefficient. Optimizing divide_by might make it better
@@ -39,4 +40,18 @@ namespace b10 {
             n10.insert(0, rem_str);
         }
     }
+}
+
+void b32_to_string(uint32_t b32_num, std::string& b10_str)
+{
+    if (b32_num == 0) {
+        b10_str = "0";
+        return;
+    }   
+    
+    b10_str = ""; 
+    while (b32_num > 0) {
+        b10_str.insert(0, 1, b32_num % 10 + '0');
+        b32_num /= 10; 
+    }   
 }

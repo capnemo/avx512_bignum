@@ -8,7 +8,6 @@ void accumulate(vec32& acc, vec32& n);
 bool is_zero(const vec32& v);
 void raise_base(vec32& current_power);
 void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod);
-void insert_at_head(uint32_t element, vec32& element_array);
 
 namespace b10 {
     
@@ -78,18 +77,13 @@ namespace b10 {
         for (auto n:digs_b10) 
             n10 += (n + '0');
     }
-
 } //namespace
 
-void insert_at_head(uint32_t element, vec32& element_array) 
-{
-    if (element != 0)  {
-        vec32 dig_vec;
-        b32_to_b10(element, dig_vec);
-        element_array.insert(element_array.begin(), dig_vec.begin(), dig_vec.end());
-    }
-}
-
+/*  Multuplies the positional value with the current power of the base(2^32)
+ *  IN: p_val positional value
+ *  IN: base_exp current power
+ *  OUT: prod, the product.
+ */
 void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod)
 {
     
@@ -101,9 +95,14 @@ void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod)
         carry = p / 10;
     }
 
-    insert_at_head(carry, prod);
+    if (carry != 0)
+        b32_to_b10(carry, prod);
 }
 
+/*  Computes the next power of 2^32
+ *  IN: current_power
+ *  OUT: current_power, the next power
+ */
 void raise_base(vec32& current_power)
 {
     uint64_t base = 4294967296;
@@ -114,9 +113,15 @@ void raise_base(vec32& current_power)
         current_power[i] = tp % 10;
     }
 
-    insert_at_head(carry, current_power);
+    if (carry != 0)
+        b32_to_b10(carry, current_power);
 }
 
+/*  Computes acc += n.
+ *  IN: acc, vector of uint32_t
+ *  IN: n, vector of uint32_t
+ *  OUT: acc
+ */
 void accumulate(vec32& acc, vec32& n)
 {
     if (is_zero(n) == true)
@@ -184,20 +189,9 @@ void b32_to_b10(uint64_t b32_num, T& b10_num)
     }
 }
 
-void b32_to_string(uint32_t b32_num, std::string& b10_str)
-{
-    if (b32_num == 0) {
-        b10_str = "0";
-        return;
-    }
-          
-    b10_str = "";
-    while (b32_num > 0) {
-        b10_str.insert(0, 1, b32_num % 10 + '0');
-        b32_num /= 10;
-    }
-}
-
+/*  Returns if v values to 0.
+ *  IN: v vector of uint32_t
+ */
 bool is_zero(const vec32& v)
 {
     if (v.size() == 0)
