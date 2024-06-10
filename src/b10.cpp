@@ -2,58 +2,46 @@
 #include "b10.h"
 #include "b32.h"
 
-template <typename T>
-void b32_to_b10(uint64_t b32_num, T& b10_num);
+void b10p9_to_b10(uint64_t b32_num, vec8& b10_num);
 void accumulate(vec32& acc, vec32& n);
 bool is_zero(const vec32& v);
 void raise_base(vec32& current_power);
 void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod);
+static const uint64_t b10p9 = 1'000'000'000;
+template <typename T>
+void print_b10(const T& num, std::string pref = "");
 
 namespace b10 {
     
-    /* Prints the contents of num to stdout.
-     * IN: num
-     */
-    void print_b10(const vec8& num)
-    {
-        for (auto n:num)
-            printf("%d", n);
-        printf("\n");
-    }
-
-    void print_b10(const vec32& num)
-    {
-        for (auto n:num)
-            printf("%u ", n);
-        printf("\n");
-    }
-
     /* Converts a uint32_t vector to a uint8_t vector
+     * First, conversion to base 10^9. All operations are 
+     * done in base 10^9. Final step is conversion to base 10.
      * IN: num
      * OUT: n10
      */
     void convert_to_b10(const vec32& num, vec8& n10) 
     {
         vec32 base_exponent = {1};
-        vec32 totals;
-        b32_to_b10(num[num.size() - 1], totals);
+        vec32 totals({(uint32_t)(num[num.size() - 1] % b10p9)});
+        uint32_t div = (uint32_t)(num[num.size() - 1] / b10p9);
+        if (div != 0) 
+            totals.insert(totals.begin(), div);
+
         for (int i = num.size() - 2; i >= 0; i--) {
             raise_base(base_exponent);
             vec32 current_dw;
             multiply_base(num[i], base_exponent, current_dw);
             accumulate(totals, current_dw);
         }
-
-        n10 = vec8(totals.size(), 0);
-        uint64_t carry = 0;
-        for (int i = totals.size() - 1; i >= 0; i--) {
-            uint64_t tp = (uint64_t)totals[i] + (uint64_t)carry;
-            carry = tp / (uint64_t)10;
-            n10[i] = tp % (uint64_t)10;
+        
+        b10p9_to_b10(totals[0], n10);
+        for (int i = 1; i < totals.size(); i++)  {
+            vec8 digs10;
+            digs10.reserve(9);
+            b10p9_to_b10(totals[i], digs10);
+            digs10.insert(digs10.begin(), 9 - digs10.size(), 0);
+            n10.insert(n10.end(), digs10.begin(), digs10.end());
         }
-
-        if (carry != 0) 
-            b32_to_b10(carry, n10);
     }
 
     /* Converts a uint32_t vector to a base 10 string
@@ -79,6 +67,14 @@ namespace b10 {
     }
 } //namespace
 
+void b10p9_to_b10(uint64_t b32_num, vec8& b10_num)
+{
+    while (b32_num > 0) {
+        b10_num.insert(b10_num.begin(), b32_num % 10);
+        b32_num /= 10;
+    }
+}
+
 /*  Multuplies the positional value with the current power of the base(2^32)
  *  IN: p_val positional value
  *  IN: base_exp current power
@@ -88,15 +84,16 @@ void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod)
 {
     
     prod = vec32(base_exp.size(), 0);
-    uint64_t carry = 0;
+    uint32_t carry = 0;
     for (int i = base_exp.size() - 1; i >= 0; i--) {
-        uint64_t p = ((uint64_t)base_exp[i] * (uint64_t)p_val) + (uint64_t)carry;
-        prod[i] = p % 10;
-        carry = p / 10;
+        uint64_t p = ((uint64_t)base_exp[i] * (uint64_t)p_val) + 
+                     (uint64_t)carry;
+        prod[i] = p % b10p9;
+        carry = p / b10p9;
     }
 
     if (carry != 0)
-        b32_to_b10(carry, prod);
+        prod.insert(prod.begin(), carry);
 }
 
 /*  Computes the next power of 2^32
@@ -105,16 +102,24 @@ void multiply_base(uint32_t p_val, const vec32& base_exp, vec32& prod)
  */
 void raise_base(vec32& current_power)
 {
-    uint64_t base = 4294967296;
+    vec32 base_32 = {4,294967296};
     uint64_t carry = 0;
     for (int i = current_power.size() - 1; i >= 0; i--) {
-        uint64_t tp = (uint64_t)current_power[i] * base + carry;
-        carry = tp / 10;
-        current_power[i] = tp % 10;
+        vec64 tp(2,0);
+        tp[0] = (uint64_t)current_power[i] * (uint64_t)base_32[0];
+        tp[1] = (uint64_t)current_power[i] * (uint64_t)base_32[1] + carry;
+        current_power[i] = tp[1] % b10p9;
+        tp[0] += tp[1] / b10p9;
+        carry = tp[0];
     }
 
-    if (carry != 0)
-        b32_to_b10(carry, current_power);
+    if (carry != 0) {
+        uint32_t new_carry = (uint64_t)carry / (uint64_t)b10p9;
+        carry = carry % b10p9;
+        current_power.insert(current_power.begin(), carry);
+        if (new_carry != 0)
+            current_power.insert(current_power.begin(), new_carry);
+    }
 }
 
 /*  Computes acc += n.
@@ -149,44 +154,25 @@ void accumulate(vec32& acc, vec32& n)
     int sm_in = sm_vec.size() - 1;
     uint32_t carry = 0;
     while (sm_in >= 0) {
-        split_64 tp;
-        tp.w = (uint64_t)lg_vec[lg_in] + (uint64_t)sm_vec[sm_in] + (uint64_t)carry;
-        carry = tp.a[1];
-        lg_vec[lg_in] = tp.a[0];
+        uint64_t sum = (uint64_t)lg_vec[lg_in] + (uint64_t)sm_vec[sm_in] + 
+                       (uint64_t)carry;
+        lg_vec[lg_in] = sum % b10p9;
+        carry = sum / b10p9;
+
         lg_in--;
         sm_in--;
     }
 
     while (lg_in >= 0) {
-        split_64 tp;
-        tp.w = (uint64_t)lg_vec[lg_in] + (uint64_t)carry;
-        carry = tp.a[1];
-        lg_vec[lg_in--] = tp.a[0];
+        uint64_t sum = (uint64_t)lg_vec[lg_in] + (uint64_t)carry;
+        carry = sum / b10p9;
+        lg_vec[lg_in--] = sum % b10p9;
     }
 
     if (carry != 0)
         lg_vec.insert(lg_vec.begin(), carry);
 
     acc = lg_vec; //Do it only in case n.size > acc.size. Rethink.
-}
-
-/*  Turns a 32 bit number into a b10 vector
- *  IN: b32_num, 32 bit number
- *  OUT: b10_num 
- */
-template <typename T>
-void b32_to_b10(uint64_t b32_num, T& b10_num)
-{
-    if (b32_num == 0) {
-        b10_num.push_back(0);
-        return;
-    }
-          
-    b10_num.reserve(10);
-    while (b32_num > 0) {
-        b10_num.insert(b10_num.begin(), b32_num % 10);
-        b32_num /= 10;
-    }
 }
 
 /*  Returns if v values to 0.
@@ -201,4 +187,18 @@ bool is_zero(const vec32& v)
         return true;
 
     return false;
+}
+    
+/* Prints the contents of num to stdout.
+* IN: num
+* IN: pref, printed before the vector.
+*/
+template <typename T>
+void print_b10(const T& num, std::string pref)
+{
+    std::cout << pref << ((pref == "") ? "":" ");
+
+    for (auto n:num)
+        std::cout << (uint32_t)n << " ";
+    std::cout << std::endl;
 }
