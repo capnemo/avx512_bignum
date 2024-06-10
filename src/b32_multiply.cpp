@@ -30,31 +30,6 @@ void b32::multiply_with_b10_digit(uint8_t digit)
         num.insert(num.begin(), carry);
 }
 
-#if 0
-void b32::multiply_with_b10_digit(uint8_t digit)
-{
-    if (digit == 0) {
-        set_zero();
-        return;
-    }
-    
-    if (digit == 1) 
-        return;
-
-    std::vector<uint8_t> power_vec = {1,2,4,8};
-    b32 adnd = std::move(*this);
-    b32 sum({0});
-    for (int k = 0; k <= 3; k++) {
-        if (power_vec[k] > digit)
-            break;
-        if ((power_vec[k] & digit) != 0) 
-            sum.add_to(adnd);
-        adnd.shift_left_array(1);
-    }
-    *this = std::move(sum);
-}
-#endif
-
 /*
  *  Computes *this *= 10 
  */
