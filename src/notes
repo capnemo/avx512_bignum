@@ -1,0 +1,7 @@
+To avoid an extra copy before calling the intrinsics, we have to store uint32_ts in a vec64. The upper part of the uint64_t
+will always be 0 except right after the intrinsic executes. The 'vec32 num' will be replaced with a vector of __m512i.
+This will require a custom allocator that will produce aligned memory. 
+A vector of __m512 may produce a compiler warning even with a custom allocator. 
+To fix this, use a custom type and without any attributes.
+All operations will deal with 8 quadwords at a time.
+
