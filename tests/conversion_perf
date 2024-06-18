@@ -1,0 +1,26 @@
+chandra@falcon:tests $ ./conv_drv -f $(./gen_num 5000000)
+Mon Jun 17 16:00:20 2024
+b10 -> b32 2835
+b32 -> b10 1417
+pass
+chandra@falcon:tests $ ./conv_drv -f $(./gen_num 1000000)
+Mon Jun 17 17:29:51 2024
+b10 -> b32 118
+b32 -> b10 57
+pass
+chandra@falcon:tests $ ./conv_drv -f $(./gen_num 2000000)
+Mon Jun 17 17:37:46 2024
+b10 -> b32 464
+b32 -> b10 246
+pass
+chandra@falcon:tests $ ./conv_drv -f $(./gen_num 3000000)
+Mon Jun 17 17:56:42 2024
+b10 -> b32 1046
+b32 -> b10 507
+pass
+chandra@falcon:tests $ ./conv_drv -f $(./gen_num 4000000)
+Mon Jun 17 18:24:16 2024
+b10 -> b32 1824
+b32 -> b10 905
+pass
+

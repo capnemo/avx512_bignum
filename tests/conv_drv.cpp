@@ -36,14 +36,15 @@ int main(int argc, char *argv[])
 
     b32 bnum;
     time_t st = time(0);
+    std::cout << ctime(&st);
     bnum.convert_to_b32(input_number);
     time_t con = time(0);
 
+    std::cout << "b10 -> b32 " << (con - st) << std::endl;
     std::string out_num;
     b10::convert_to_b10(bnum, out_num);
     time_t fin = time(0);
 
-    std::cout << "b10 -> b32 " << (con - st) << std::endl;
     std::cout << "b32 -> b10 " << (fin - con) << std::endl;
     std::cout << ((out_num == input_number) ? "pass":"fail") << std::endl;
     if (file_out == false) {
