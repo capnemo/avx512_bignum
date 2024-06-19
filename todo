@@ -1,12 +1,14 @@
-a) The b32 vector(vec32 num) should be a vector of __m512. This will avoid a copy 
-   before running the intrinsic
-   To furthur optimize the b32->b10, b32 exponents should be generated apriori and
-   not on the fly.
+a) The b32 vector(vec32 num) should be a vector of __m512*. This will avoid a      copy before running the intrinsic
+   To furthur optimize the b32->b10, b32 exponents should be generated apriori 
+   and not on the fly.
    Conversion to assembly should improve b10->b32 performance.
+   For b10->b32, conversion from b10^9 instead of from b10 might improve
+   performance
 
-b) Prior to assembly conversion, num32 should be converted into a vector of __m512*
-c) Move all avx512 code to assembly -- all carry function should be done in assembly.
+c) Move all avx512 code to assembly -- all carry function should be done inside
+   assembly.
 d) b32 division -- Performance improvements.
-e) Detect the lack of avx512 extensions and switch to non avx512 code at runtime.
+e) Detect the lack of avx512 extensions and switch to non avx512 code at 
+   runtime.
 f) Expression parser -- low priority
 g) Exponent -- low priority.

@@ -121,7 +121,6 @@ void raise_base(vec32& current_power)
             current_power.insert(current_power.begin(), new_carry);
     }
 }
-
 /*  Computes acc += n.
  *  IN: acc, vector of uint32_t
  *  IN: n, vector of uint32_t
@@ -139,12 +138,14 @@ void accumulate(vec32& acc, vec32& n)
 
     vec32* lg_ptr;
     vec32* sm_ptr;
+    bool copy_required = false;
     if (acc.size() >= n.size()) {
         lg_ptr = &acc;
         sm_ptr = &n;
     } else {
         lg_ptr = &n;
         sm_ptr = &acc;
+        copy_required = true;
     }
 
     vec32& lg_vec = *lg_ptr;
@@ -172,9 +173,9 @@ void accumulate(vec32& acc, vec32& n)
     if (carry != 0)
         lg_vec.insert(lg_vec.begin(), carry);
 
-    acc = lg_vec; //Do it only in case n.size > acc.size. Rethink.
+    if (copy_required == true)
+        acc = std::move(lg_vec); 
 }
-
 /*  Returns if v values to 0.
  *  IN: v vector of uint32_t
  */

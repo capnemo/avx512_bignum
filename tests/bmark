@@ -1,3 +1,4 @@
+chandra@falcon:tests $ ./run_op.py all
 Generating random numbers
 Running test for -a for size 1
 Running test for -a for size 2
@@ -10,7 +11,7 @@ Running test for -a for size 40
 Running test for -a for size 100
 Running test for -a for size 200
 Running test for -a for size 1000
-Time taken for -a is 4.100280072991154
+Time taken for -a is 3.9758142820210196
 Running test for -s for size 1
 Running test for -s for size 2
 Running test for -s for size 3
@@ -22,7 +23,7 @@ Running test for -s for size 40
 Running test for -s for size 100
 Running test for -s for size 200
 Running test for -s for size 1000
-Time taken for -s is 3.1590072190010687
+Time taken for -s is 3.0390856050071307
 Running test for -m for size 1
 Running test for -m for size 2
 Running test for -m for size 3
@@ -34,7 +35,7 @@ Running test for -m for size 40
 Running test for -m for size 100
 Running test for -m for size 200
 Running test for -m for size 1000
-Time taken for -m is 5.305493617997854
+Time taken for -m is 5.054993839003146
 Running test for -d for size 1
 Running test for -d for size 2
 Running test for -d for size 3
@@ -46,7 +47,7 @@ Running test for -d for size 40
 Running test for -d for size 100
 Running test for -d for size 200
 Running test for -d for size 1000
-Time taken for -d is 3.4648502490017563
+Time taken for -d is 3.346642757009249
 Running test for -r for size 1
 Running test for -r for size 2
 Running test for -r for size 3
@@ -58,10 +59,10 @@ Running test for -r for size 40
 Running test for -r for size 100
 Running test for -r for size 200
 Running test for -r for size 1000
-Time taken for -r is 3.531652813006076
+Time taken for -r is 3.367597642005421
 Running sign tests
 chandra@falcon:tests $ ./conv_drv -f $(./gen_num 500000)
+Tue Jun 18 16:42:30 2024
 b10 -> b32 30
-b32 -> b10 15
+b32 -> b10 14
 pass
-chandra@falcon:tests $ 
