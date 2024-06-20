@@ -37,7 +37,7 @@ class b32 {
     void add_singles(const b32& op); 
     void multiply_singles(const b32& op);
     void multiply_with_10();
-    void multiply_with_b10_digit(uint8_t digit);
+    void multiply_with_b10_digit(uint32_t digit);
     void subtract_singles(const b32& op);
     void get_base10_num(std::string& str);
     void flip_sign();
@@ -57,6 +57,8 @@ class b32 {
     bool is_unity() const;
     void set_div_error() {div_error = true;}
     void resolve_signs(const b32& cmp);
+    void convert_to_b10p9(const vec8& b10_num, vec32& b10p9_num);
+
 
     private:
     vec32 num;

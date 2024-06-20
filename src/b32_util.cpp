@@ -266,6 +266,27 @@ void b32::convert_to_b32(const std::string& b10_num)
 }
 
 /* 
+ * Converts a b10 vector into a vector of 10^9 numbers. 
+ * IN: b10_num 
+ * OUT: b10p9_num 
+ */
+void b32::convert_to_b10p9(const vec8& b10_num, vec32& b10p9_num)
+{
+    std::string num_str;
+    for (int i = b10_num.size() - 1; i >= 0; i--) {
+        num_str.insert(num_str.begin(), b10_num[i] + '0');
+        if (num_str.size() == 9) {
+            b10p9_num.insert(b10p9_num.begin(), 
+                             strtoul(num_str.c_str(), nullptr, 10));
+            num_str = "";
+        }
+    }
+
+    b10p9_num.insert(b10p9_num.begin(), 
+                     strtoul(num_str.c_str(), nullptr, 10));
+}
+
+/* 
  * Converts uint8_t array to a uint32_t array and instantiates *this with it.
  * IN: b10_num: uint8_t array
  * IN: under_zero: Sign of the number
@@ -273,25 +294,27 @@ void b32::convert_to_b32(const std::string& b10_num)
 void b32::convert_to_b32(const vec8& b10_num, bool under_zero)
 {
     if (b10_num.size() == 0) {
-        num.push_back(0);
+        num = vec32({0});
         return;
     }
-
+    
+    uint32_t b10p9 = 1'000'000'000;
     b32 power_10({1});
-    b32 num_10({10});
 
-    int sz = b10_num.size();
-    num.clear();
-    num.push_back(b10_num[sz - 1]);
+    vec32 b10p9_digs;
+    convert_to_b10p9(b10_num, b10p9_digs);
+
+    int sz = b10p9_digs.size();
+    num = vec32(1, b10p9_digs[sz - 1]);
     for (int i = sz - 2; i >= 0; i--) {
-        power_10.multiply_with_b10_digit(10);
-        if (b10_num[i] != 0) {
-            b32 dig = power_10;
-            dig.multiply_with_b10_digit(b10_num[i]);
-            add_to(dig);
-        }
+        power_10.multiply_with_b10_digit(b10p9);
+        b32 dig_power = power_10;
+        dig_power.multiply_with_b10_digit(b10p9_digs[i]);
+        add_to(dig_power);
     }
+
     is_negative = under_zero;
+
 }
 
 /*

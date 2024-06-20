@@ -5,10 +5,10 @@
 using int_vec_map = std::map<uint8_t, std::set<uint8_t>>;
 
 /*
- *  Computes *this *= digit when digit >= 0 and < 10.
+ *  Computes *this *= digit when digit < 2^32.
  *  IN:digit
  */
-void b32::multiply_with_b10_digit(uint8_t digit)
+void b32::multiply_with_b10_digit(uint32_t digit)
 {
     if (digit == 0) {
         set_zero();
