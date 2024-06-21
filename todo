@@ -1,14 +1,16 @@
 a) The b32 vector(vec32 num) should be a vector of __m512*. This will avoid a      copy before running the intrinsic
-   To furthur optimize the b32->b10, b32 exponents should be generated apriori 
+b) To furthur optimize the b32->b10, b32 exponents should be generated apriori 
    and not on the fly.
-   Conversion to assembly should improve b10->b32 performance.
-   For b10->b32, conversion from b10^9 instead of from b10 might improve
-   performance
+c) Conversion to assembly should improve b10->b32 performance.
 
-c) Move all avx512 code to assembly -- all carry function should be done inside
+d) Move all avx512 code to assembly -- all carry function should be done inside
    assembly.
-d) b32 division -- Performance improvements.
-e) Detect the lack of avx512 extensions and switch to non avx512 code at 
+e) b32 division -- Performance improvements. Synthesize a denominator
+   where the divisor occours whereever there is a 1 in the numerator.
+   The synthesized denominator is then shifted right by 1.
+   This step is done only once. Everything is as is after that step.
+   This should reduce the number of iterations for divide_by.
+f) Detect the lack of avx512 extensions and switch to non avx512 code at 
    runtime.
-f) Expression parser -- low priority
-g) Exponent -- low priority.
+g) Expression parser -- low priority
+h) Exponent -- low priority.
