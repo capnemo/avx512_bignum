@@ -3,7 +3,7 @@ SRCS:=src/b10.cpp src/b32_util.cpp src/b32_add.cpp src/b32_multiply.cpp src/b32_
 INCL:=incl/b10.h incl/b32.h incl/types.h
 TEST_BINS:=tests/conv_drv tests/operator_drv
 TEST_SRC=:=tests/conv_drv.cpp tests/operator_drv.cpp
-CC=g++ -c -Iincl -mavx512bw
+CC=g++ -c -Iincl -mavx512f
 CC2=g++ -Iincl 
 
 debug: CC += -ggdb 

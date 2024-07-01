@@ -1,6 +1,4 @@
-#include <emmintrin.h>
 #include <immintrin.h>
-#include <smmintrin.h>
 #include <vector>
 #include <cstdint>
 
