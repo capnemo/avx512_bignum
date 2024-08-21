@@ -45,4 +45,5 @@ Current Status
 ----------------
 References to the __m512i datatype need to be removed for reasons of performance and clarity.
 All operators will eventually be implemented in assembly.
+The asm directory reflects the current status of this effort.
 
