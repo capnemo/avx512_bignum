@@ -40,3 +40,9 @@ Performance tests.
 file_ops will run and time an operation on a pair of numbers contained in files.
 perf_test.py will generate operands of a given size and run and time an operation on those numbers.
 All commands when run without arguments will print usage instructions.
+
+Current Status
+----------------
+References to the __m512i datatype need to be removed for reasons of performance and clarity.
+All operators will eventually be implemented in assembly.
+
