@@ -1,0 +1,2 @@
+To generate the assembly for m512_vec.c the command line is
+gcc -mavx512f -S -Ofast m512_vec.c
