@@ -45,5 +45,7 @@ Current Status
 ----------------
 References to the __m512i datatype need to be removed for reasons of performance and clarity.
 All operators will eventually be implemented in assembly.
-The asm directory reflects the current status of this effort.
+The staging directory reflects the current status of this effort.
+Changing away from the __m512i datatype will mean rewriting the whole library.
+Furthur changes will mean a new repository.
 
