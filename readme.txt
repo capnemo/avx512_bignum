@@ -7,6 +7,7 @@ Prerequisites
 a) Hardware that supports avx512 running a recent linux distribution.
 b) g++ version >= 13.2.1
 c) python version >= 3.12.3
+
 b) and c) are what was used to develop this library. Older versions may work.
 
 Building the library.
