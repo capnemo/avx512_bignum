@@ -19,3 +19,18 @@ void shift_carry(uint64_t* num)
         }
     }   
 }
+
+void new_carry(uint64_t* num)
+{
+    uint64_t mask = 0x100000000L;
+    int32_t carry = 0L;
+    for (int i = 7; i >= 0; i--) {
+        num[i] += carry;
+        uint32_t* parts = (uint32_t *)(num + i);
+        carry = parts[1];
+        uint64_t tmp = (uint64_t)carry << 1;
+        tmp = tmp & mask;
+        //num[i] = (int32_t)parts[0] + tmp;
+	num[i] += tmp;
+    }   
+}
