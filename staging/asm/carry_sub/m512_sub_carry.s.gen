@@ -1,0 +1,214 @@
+	.file	"m512_sub_carry.c"
+	.text
+	.p2align 4
+	.globl	carry_sub
+	.type	carry_sub, @function
+carry_sub:
+.LFB6566:
+	.cfi_startproc
+	vmovdqa32	shift_in(%rip), %zmm0
+	movl	(%rdi), %edx
+	movl	$0, (%rdi)
+	vmovdqa32	msb_in(%rip), %zmm2
+	vmovdqa64	(%rdi), %zmm1
+	vpermd	%zmm1, %zmm0, %zmm0
+	vpermd	%zmm1, %zmm2, %zmm2
+	vpsrlq	$31, %zmm0, %zmm0
+	vpsllq	$32, %zmm0, %zmm0
+	vpaddq	%zmm2, %zmm0, %zmm0
+	vpaddq	%zmm1, %zmm0, %zmm0
+	vmovdqa64	%zmm0, (%rdi)
+	vmovdqa32	64+shift_in(%rip), %zmm1
+	vmovdqa32	64+msb_in(%rip), %zmm2
+	vpermd	%zmm0, %zmm1, %zmm1
+	vpermd	%zmm0, %zmm2, %zmm2
+	vpsrlq	$31, %zmm1, %zmm1
+	vpsllq	$32, %zmm1, %zmm1
+	vpaddq	%zmm2, %zmm1, %zmm1
+	vpaddq	%zmm0, %zmm1, %zmm1
+	vmovdqa64	%zmm1, (%rdi)
+	vmovdqa32	128+shift_in(%rip), %zmm0
+	vmovdqa32	128+msb_in(%rip), %zmm2
+	vpermd	%zmm1, %zmm0, %zmm0
+	vpermd	%zmm1, %zmm2, %zmm2
+	vpsrlq	$31, %zmm0, %zmm0
+	vpsllq	$32, %zmm0, %zmm0
+	vpaddq	%zmm2, %zmm0, %zmm0
+	vpaddq	%zmm1, %zmm0, %zmm0
+	vmovdqa64	%zmm0, (%rdi)
+	vmovdqa32	192+shift_in(%rip), %zmm1
+	vmovdqa32	192+msb_in(%rip), %zmm2
+	vpermd	%zmm0, %zmm1, %zmm1
+	vpermd	%zmm0, %zmm2, %zmm2
+	vpsrlq	$31, %zmm1, %zmm1
+	vpsllq	$32, %zmm1, %zmm1
+	vpaddq	%zmm2, %zmm1, %zmm1
+	vpaddq	%zmm0, %zmm1, %zmm1
+	vmovdqa64	%zmm1, (%rdi)
+	vmovdqa32	256+shift_in(%rip), %zmm0
+	vmovdqa32	256+msb_in(%rip), %zmm2
+	vpermd	%zmm1, %zmm0, %zmm0
+	vpermd	%zmm1, %zmm2, %zmm2
+	vpsrlq	$31, %zmm0, %zmm0
+	vpsllq	$32, %zmm0, %zmm0
+	vpaddq	%zmm2, %zmm0, %zmm0
+	vpaddq	%zmm1, %zmm0, %zmm0
+	vmovdqa64	%zmm0, (%rdi)
+	vmovdqa32	320+shift_in(%rip), %zmm1
+	vmovdqa32	320+msb_in(%rip), %zmm2
+	vpermd	%zmm0, %zmm1, %zmm1
+	vpermd	%zmm0, %zmm2, %zmm2
+	vpsrlq	$31, %zmm1, %zmm1
+	vpsllq	$32, %zmm1, %zmm1
+	vpaddq	%zmm2, %zmm1, %zmm1
+	vpaddq	%zmm0, %zmm1, %zmm1
+	vmovdqa64	%zmm1, (%rdi)
+	vmovdqa32	384+shift_in(%rip), %zmm0
+	vmovdqa32	384+msb_in(%rip), %zmm2
+	vpermd	%zmm1, %zmm0, %zmm0
+	vpermd	%zmm1, %zmm2, %zmm2
+	vpsrlq	$31, %zmm0, %zmm0
+	vpsllq	$32, %zmm0, %zmm0
+	vpaddq	%zmm2, %zmm0, %zmm0
+	vpaddq	%zmm1, %zmm0, %zmm0
+	vmovq	%xmm0, %rax
+	vmovdqa64	%zmm0, (%rdi)
+	addq	%rdx, %rax
+	movq	%rax, (%rdi)
+	vzeroupper
+	ret
+	.cfi_endproc
+.LFE6566:
+	.size	carry_sub, .-carry_sub
+	.globl	shift_in
+	.data
+	.align 64
+	.type	shift_in, @object
+	.size	shift_in, 448
+shift_in:
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	15
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	13
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	11
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	9
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	7
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	5
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	3
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.globl	msb_in
+	.align 64
+	.type	msb_in, @object
+	.size	msb_in, 448
+msb_in:
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	64424509455
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	55834574861
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	47244640267
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	38654705673
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	30064771079
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	21474836485
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	12884901891
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.quad	0
+	.globl	qw_carry
+	.section	.rodata
+	.align 8
+	.type	qw_carry, @object
+	.size	qw_carry, 8
+qw_carry:
+	.quad	4294967297
+	.ident	"GCC: (GNU) 14.2.1 20240805"
+	.section	.note.GNU-stack,"",@progbits
