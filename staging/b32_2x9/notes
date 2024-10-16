@@ -5,4 +5,6 @@ All members of the uint32_t vector will be > 0 at all times.
 and a vector of pointers to uin64_t 8 elements apart (512 bits).
 
 Allocation will be through aligned_allocator.
+To detect if the processor supports AVX512, 
+use the __cpuid function from cpuid.h header
 
