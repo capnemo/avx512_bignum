@@ -49,4 +49,5 @@ All operators will eventually be implemented in assembly.
 The staging directory reflects the current status of this effort.
 Changing away from the __m512i datatype will mean rewriting the whole library.
 Furthur changes will mean a new repository.
-
+PCLMULQDQ — Carry-Less Multiplication Quadword
+There should be a similar instruction for Add and subtract.
