@@ -1,3 +1,5 @@
 
 The expression parser using lex and yacc is contraindicated.
-Too complicated for an expression parser that has to handle just 3 types of tokens
+Too complicated and too many moving parts for an expression parser that 
+has to handle just 3 types of tokens
+The right approach would be to write a C/C++ parser
