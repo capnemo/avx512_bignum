@@ -1,0 +1,5 @@
+
+cpp based parser for the test harness.
+Syntax is parser "expression". The expression argument is in quotes.
+There are some bugs.
+Expressions like (e)(e)(e) are not parsed correctly.
