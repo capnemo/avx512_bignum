@@ -18,7 +18,7 @@ class parser {
 
     struct token {
         token_val value;
-        bool is_num = false;
+        bool is_num = false; //not necessary, ttype should suffice.
         token_type ttype = UNKN;
     };
 
@@ -51,7 +51,6 @@ class parser {
             else
                 std::cout << t.value.op;
                 
-            //std::cout << (t.is_num == true) ? t.value.num : t.value.op;
             std::cout << " ";
             tit++;
         }
@@ -156,7 +155,6 @@ class parser {
                                                      nt->value.num);
                     pt->is_num = true;
                     tl_it = pt;
-                    //tl_it = std::next(nt);
                     token_list.erase(ct);
                     token_list.erase(nt);
                 } else 
@@ -164,15 +162,29 @@ class parser {
             }
         }
     }
+    
+    bool is_digit(char c)
+    {
+        if ((c >= '0') && (c <= '9')) 
+            return true;
+
+        return false;
+    }
 
     void tokenize() {
         std::string num_str;
         int i = 0;
+        int k;
         while (i < input_str.size()) {
             token t;
             t.ttype = classify_token(input_str[i]);
             switch (t.ttype) {
                 case OPERATOR:
+                    if ((input_str[i] == '-') && 
+                        (is_digit(input_str[i + 1]) == true)) {
+                        i++;
+                        break;
+                    }
                     t.value.op = input_str[i];
                     token_list.push_back(t);
                     i++;
@@ -188,42 +200,23 @@ class parser {
                     i++;
                     break;
                 case DIGIT:
+                    k = i;
                     num_str = "";
                     while((i < input_str.size()) && 
-                                (classify_token(input_str[i]) == DIGIT)) {
+                                (is_digit(input_str[i]) == true)) {
                         num_str += input_str[i++];
                     }
                     t.is_num = true;
                     t.ttype = NUMBER;
                     t.value.num = std::strtoll(num_str.c_str(), nullptr, 10);
+                    if ((k > 0) && (input_str[k - 1] == '-'))
+                        t.value.num *= -1;
                     token_list.push_back(t);
                     break;
                 case UNKN:
                     i++;
                     break;
             }
-        }
-
-        lit tb = token_list.begin();
-        lit nb = std::next(tb);
-        if ((tb->ttype == OPERATOR) && (tb->value.op == '-')) {
-            if (nb->ttype == NUMBER) {
-                nb->value.num *= -1;
-                token_list.erase(tb);
-            }
-        }
-            
-        lit tl_it = token_list.begin();
-        while (tl_it != token_list.end()) {
-            lit ntk = std::next(tl_it);
-            if ((tl_it->ttype == OPERATOR) && (ntk->ttype == OPERATOR) && 
-                (ntk->value.op == '-') && (std::next(ntk)->ttype == NUMBER)) {
-                lit num_tk = std::next(ntk);
-                num_tk->value.num *= -1;
-                tl_it = num_tk;
-                token_list.erase(ntk);
-            }
-            tl_it = std::next(tl_it);
         }
     }
    

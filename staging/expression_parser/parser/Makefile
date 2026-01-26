@@ -1,2 +1,5 @@
 parser:parser.cpp
-	g++ parser.cpp -o parser
+	g++ -ggdb parser.cpp -o parser
+
+clean:
+	rm parser
